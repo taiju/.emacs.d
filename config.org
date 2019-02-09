@@ -1,0 +1,437 @@
+#+TITLE: Emacs の設定
+
+Emacs の設定。
+
+Orgモードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))~ で読み込むこまれることで設定ファイルになる。
+
+* パッケージ設定
+
+何はなくともパッケージ。
+
+melpa, org のパッケージアーカイブ URL を指定する。
+
+#+BEGIN_SRC emacs-lisp
+  (setq package-archives
+	'(("gnu" . "https://elpa.gnu.org/packages/")
+	  ("org" . "http://orgmode.org/elpa/")
+	  ("melpa" . "https://melpa.org/packages/")))
+#+END_SRC
+
+パッケージを初期化する。
+
+#+BEGIN_SRC emacs-lisp
+  (package-initialize)
+#+END_SRC
+
+パッケージが未インストールの場合は起動時にインストールされるようにしたいので、そんな感じのカスタム関数を定義しておく。
+
+#+BEGIN_SRC emacs-lisp
+  (defun taiju/package-install (pkg)
+    (unless (package-installed-p pkg)
+      (unless package-archive-contents
+	(package-refresh-contents))
+      (package-install pkg)))
+#+END_SRC
+
+* 起動時の設定
+
+スタートアップ画面は出さない。
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+#+END_SRC
+
+起動直後フルスクリーン化する。
+
+#+BEGIN_SRC emacs-lisp
+  (toggle-frame-fullscreen)
+#+END_SRC
+
+ansi-term はいつも起動することになるので、最初から起動しておく。
+
+#+BEGIN_SRC emacs-lisp
+  (ansi-term "bash")
+#+END_SRC
+
+* 見た目の設定
+
+ツールバーも、メニューバーも、スクロールバーもいらない。
+
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+#+END_SRC
+
+フルスクリーンだと時間とかバッテリー残量見えなくて困るので、モードラインに表示する。
+
+#+BEGIN_SRC emacs-lisp
+  (setq display-time-format "%m-%d %H:%M")
+  (display-time)
+  (display-battery-mode t)
+#+END_SRC
+
+** テーマ
+
+とりあえず、標準で入っている leuven を使う。
+
+ #+BEGIN_SRC emacs-lisp
+   (load-theme 'leuven t)
+ #+END_SRC
+
+* 挙動の調整
+
+スクロール時に画面が動きすぎる問題を解消する。
+
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-conservatively 100)
+#+END_SRC
+
+質問の重要度に関わらずは y or n で答えたい。
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+つい癖で半角全角キーで日本語入力を切り替えてしまうので、半角全角キーにも ~toggle-input-method~ を割り当てておく。
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<zenkaku-hankaku>") 'toggle-input-method)
+#+END_SRC
+
+* 日本語
+
+** 言語環境
+
+言語環境を日本語にする。
+
+#+BEGIN_SRC emacs-lisp
+  (set-language-environment "Japanese")
+#+END_SRC
+
+** 文字コード
+
+文字コードは UTF-8 を優先。
+
+#+BEGIN_SRC emacs-lisp
+  (prefer-coding-system 'utf-8)
+#+END_SRC
+
+** 日本語入力
+
+日本語入力は mozc 一択。[fn:mozc]
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'mozc)
+  (setq default-input-method "japanese-mozc")
+#+END_SRC
+
+デフォルトのスタイルはちょっとうるさいので、スタイルを変更する。
+
+#+BEGIN_SRC emacs-lisp
+  (setq mozc-candidate-style 'echo-area)
+#+END_SRC
+
+* Emacs Lisp
+
+Emacs Lisp を編集しやすいようにする。
+
+Paredit をインストールする。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'paredit)
+#+END_SRC
+
+Emacs Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+				    (show-paren-mode t)
+				    (enable-paredit-mode)
+				    (eldoc-mode t)))
+#+END_SRC
+
+* フォント
+
+フォントは Ricty を使う。
+
+標準だと org-mode の表がずれたりするので、半角と全角が1:2になるようにスケールも調整する。
+
+#+BEGIN_SRC emacs-lisp
+  (let ((f "Ricty"))
+    (set-face-attribute 'default nil :family f :height 110)
+    (set-face-attribute 'fixed-pitch nil :family f)
+    (set-face-attribute 'variable-pitch nil :family f)
+    (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f))
+    (add-to-list 'face-font-rescale-alist `(,f . 1.0)))
+#+END_SRC
+
+* ファイル全般
+
+自動保存しない。
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-default nil)
+#+END_SRC
+
+バックアップも作らない。
+
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+#+END_SRC
+
+POSIX のファイルの定義に則り、最終行に改行を入れる。
+
+#+BEGIN_SRC emacs-lisp
+  (setq require-final-newline t)
+#+END_SRC
+
+保存時に余計なホワイトスペースを削除するようにする。
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook #'delete-trailing-whitespace)
+#+END_SRC
+
+基本はこれで良いけど、diff 出過ぎて辛いことになる場合は OFF にできるようにカスタムコマンドを定義しておく。
+
+#+BEGIN_SRC emacs-lisp
+  (defun taiju/toggle-delete-trailing-whitespace-on-save ()
+    (interactive)
+    (cond ((member 'delete-trailing-whitespace before-save-hook)
+	   (remove-hook 'before-save-hook 'delete-trailing-whitespace)
+	   (message "delete-trailing-whitespace: OFF"))
+	  (t
+	   (add-hook 'before-save-hook 'delete-trailing-whitespace)
+	   (message "delete-trailing-whitespace: ON"))))
+#+END_SRC
+
+* 各種パッケージ
+
+ここからは各種パッケージの個別設定を書いていく。
+
+** Ido
+
+コマンド補完等は Ido を全面的に採用する。標準で入っているのし、デフォルト厨的に。
+
+#+BEGIN_SRC emacs-lisp
+  (ido-mode t)
+#+END_SRC
+
+記憶力がないので、Flexible Matching を有効にする。
+
+#+BEGIN_SRC emacs-lisp
+  (setq ido-enable-flex-matching t)
+#+END_SRC
+
+補完候補が大文字か小文字かも区別したくない。
+
+
+#+BEGIN_SRC emacs-lisp
+  (setq ido-case-fold t)
+#+END_SRC
+
+なるべくいろんなところで使えるようにする。
+
+#+BEGIN_SRC emacs-lisp
+  (ido-everywhere t)
+#+END_SRC
+
+*** ido-completing-read+
+
+ido-every-where でも補完対象足りない。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'ido-completing-read+)
+  (ido-ubiquitous-mode t)
+#+END_SRC
+
+*** smex
+
+~M-x~ でも Ido が使えるように ~smex~ を入れて、初期化しておく。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'smex)
+  (smex-initialize)
+#+END_SRC
+
+キーバインドは[[https://github.com/nonsequitur/smex/blob/master/README.markdown][公式ドキュメント]]そのままの設定にする。
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+#+END_SRC
+
+*** ido-vertical
+
+やはり補完候補は縦並びがしっくりくる。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'ido-vertical-mode)
+  (ido-vertical-mode 1)
+#+END_SRC
+
+補完候補の選択は使い慣れた ~C-n~, ~C-p~ にする。[fn:ido-vertical]
+
+#+BEGIN_SRC emacs-lisp
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+#+END_SRC
+
+** company-mode
+
+コード等の補完は company-mode を使う。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'company)
+#+END_SRC
+
+使えるタイミングでは常に使いたいので、 ~global-company-mode~ を有効する。
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+
+補完候補はすぐ出て欲しいので delay しない。
+
+#+BEGIN_SRC emacs-lisp
+  (setq company-idle-delay 0)
+#+END_SRC
+
+** Magit
+
+最高の Git クライアント。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'magit)
+#+END_SRC
+
+Ido を有効にする。
+
+#+BEGIN_SRC emacs-lisp
+  (setq magit-completing-read-function 'magit-ido-completing-read)
+#+END_SRC
+
+** Org
+
+言わずもがな便利に使っている。
+
+*** org-capture
+
+キーバインドは標準的なやつ。
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "\C-cc") 'org-capture)
+#+END_SRC
+
+テンプレートは下記。
+
+基本的にほとんど TODO リストだけど、内容に応じて収集先を適宜変えている。
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+	`(("b" "Bucket List" entry (file ,(expand-file-name "bucket.org" org-directory))
+	   "* TODO %?")
+	  ("w" "Wish List" entry (file ,(expand-file-name "wish.org" org-directory))
+	   "* TODO %?")
+	  ("t" "TODO List" entry (file ,(expand-file-name "todo.org" org-directory))
+	   "* TODO %?")
+	  ("o" "Outsourcing List" entry (file ,(expand-file-name "outsourcing.org" org-directory))
+	   "* TODO %?")
+	  ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
+	   "* %?")))
+#+END_SRC
+
+*** org-agenda
+
+キーバインドは標準的なやつ。
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "\C-ca") 'org-agenda)
+#+END_SRC
+
+~org-directory~ を ~org-agenda-files~ に設定する。
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files (list org-directory))
+#+END_SRC
+
+*** org-babel
+
+いろいろ org-babel で実行できるようにしておく。
+
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (dot . t)
+     (sql . t)
+     (shell . t)
+     (perl . t)))
+#+END_SRC
+
+** undo-tree
+
+標準の undo / redo がうまく使いこなせないので、undo-tree を入れる。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'undo-tree)
+  (undo-tree-mode 1)
+#+END_SRC
+
+** Twitter
+
+Twitter クライアントは Emacs で事足りる。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'twittering-mode)
+#+END_SRC
+
+パスワードを保存する。
+
+#+BEGIN_SRC emacs-lisp
+  (setq twittering-use-master-password t)
+#+END_SRC
+
+** which-key
+
+うる覚えのキーバインドは which-key があると助かる時がある。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'which-key)
+  (which-key-mode)
+#+END_SRC
+
+** dired
+
+dired-subtree を入れて、dired をツリーで操作できるようにする。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'dired-subtree)
+#+END_SRC
+
+ツリーの開閉を直感的なキーバインドで操作できるようにする。
+
+#+BEGIN_SRC emacs-lisp
+  (require 'dired)
+  (define-key dired-mode-map (kbd "<right>") 'dired-subtree-insert)
+  (define-key dired-mode-map (kbd "<left>") 'dired-subtree-remove)
+  (define-key dired-mode-map (kbd "f") 'dired-subtree-insert)
+  (define-key dired-mode-map (kbd "b") 'dired-subtree-remove)
+#+END_SRC
+
+デフォルトだとサブツリーのバックグラウンドカラーがどぎつくて見にくすぎるので、色変わる必要もないし OFF る。
+
+#+BEGIN_SRC emacs-lisp
+  (setq dired-subtree-use-backgrounds nil)
+#+END_SRC
+
+* やりたいこと
+
+** TODO よく使うプログラミング言語の設定
+** TODO まだ出会っていない素敵なパッケージの調査
+
+* Footnotes
+
+[fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
+
+[fn:ido-vertical] ~ido-toggle-prefix~ が ~C-p~ にバインドされているけど、使わないので上書きして問題ない。
