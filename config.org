@@ -2,7 +2,7 @@
 
 Emacs の設定。
 
-Orgモードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))~ で読み込むこまれることで設定ファイルになる。
+Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))~ で読み込まれることで設定ファイルになる。
 
 * パッケージ設定
 
@@ -13,8 +13,8 @@ melpa, org のパッケージアーカイブ URL を指定する。
 #+BEGIN_SRC emacs-lisp
   (setq package-archives
 	'(("gnu" . "https://elpa.gnu.org/packages/")
-	  ("org" . "http://orgmode.org/elpa/")
-	  ("melpa" . "https://melpa.org/packages/")))
+	  ("melpa" . "https://melpa.org/packages/")
+	  ("org" . "http://orgmode.org/elpa/")))
 #+END_SRC
 
 パッケージを初期化する。
@@ -41,7 +41,7 @@ melpa, org のパッケージアーカイブ URL を指定する。
   (setq inhibit-startup-message t)
 #+END_SRC
 
-起動直後フルスクリーン化する。
+起動直後からフルスクリーン化する。
 
 #+BEGIN_SRC emacs-lisp
   (toggle-frame-fullscreen)
@@ -69,7 +69,7 @@ ansi-term はいつも起動することになるので、最初から起動し�
   (scroll-bar-mode -1)
 #+END_SRC
 
-フルスクリーンだと時間とかバッテリー残量見えなくて困るので、モードラインに表示する。
+フルスクリーンだと時間とかバッテリー残量とかが見えなくて困るので、モードラインに表示する。
 
 #+BEGIN_SRC emacs-lisp
   (setq display-time-format "%m-%d %H:%M")
@@ -99,7 +99,7 @@ ansi-term はいつも起動することになるので、最初から起動し�
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
-つい癖で半角全角キーで日本語入力を切り替えてしまうので、半角全角キーにも ~toggle-input-method~ を割り当てておく。
+つい癖で全角半角キーで日本語入力を切り替えてしまうので、全角半角キーにも ~toggle-input-method~ を割り当てておく。
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "<zenkaku-hankaku>") 'toggle-input-method)
@@ -198,7 +198,7 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 #+END_SRC
 
-基本はこれで良いけど、diff 出過ぎて辛いことになる場合は OFF にできるようにカスタムコマンドを定義しておく。
+基本はこれで良いんだけど、Git 管理下のファイル等で diff が出過ぎて辛いことになったりする場合は、 OFF にできるようにカスタムコマンドを定義しておく。
 
 #+BEGIN_SRC emacs-lisp
   (defun taiju/toggle-delete-trailing-whitespace-on-save ()
@@ -217,7 +217,7 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
 
 ** Ido
 
-コマンド補完等は Ido を全面的に採用する。標準で入っているし、デフォルト厨的に。
+コマンド補完等は Ido を全面的に採用する。自分はデフォルト厨なので標準で入っているのが良い。
 
 #+BEGIN_SRC emacs-lisp
   (ido-mode t)
@@ -231,7 +231,6 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
 
 補完候補が大文字か小文字かも区別したくない。
 
-
 #+BEGIN_SRC emacs-lisp
   (setq ido-case-fold t)
 #+END_SRC
@@ -244,7 +243,7 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
 
 *** ido-completing-read+
 
-ido-every-where でも補完対象足りない。
+ido-every-where でも補完対象が足りない。
 
 #+BEGIN_SRC emacs-lisp
   (taiju/package-install 'ido-completing-read+)
@@ -425,7 +424,7 @@ dired-subtree を入れて、dired をツリーで操作できるようにする
   (define-key dired-mode-map (kbd "b") 'dired-subtree-remove)
 #+END_SRC
 
-デフォルトだとサブツリーのバックグラウンドカラーがどぎつくて見にくすぎるので、色変わる必要もないし OFF る。
+デフォルトだとサブツリーのバックグラウンドカラーがどぎつくて見にくすぎるので、色が変わる必要性もないし OFF る。
 
 #+BEGIN_SRC emacs-lisp
   (setq dired-subtree-use-backgrounds nil)
@@ -446,11 +445,6 @@ org-mode で有効化しておく。
 #+END_SRC
 
 絵文字のテスト:ok_hand:
-
-* やりたいこと
-
-** TODO よく使うプログラミング言語の設定
-** TODO まだ出会っていない素敵なパッケージの調査
 
 * Footnotes
 
