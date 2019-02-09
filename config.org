@@ -56,7 +56,7 @@ ansi-term はいつも起動することになるので、最初から起動し�
 上記のままだと初期画面が ansi-term になってしまって辛いので ~*scratch*~ バッファに切り替える。
 
 #+BEGIN_SRC emacs-lisp
-  (initial-buffer-choice t)
+  (setq initial-buffer-choice t)
 #+END_SRC
 
 * 見た目の設定
@@ -380,7 +380,7 @@ Ido を有効にする。
 
 #+BEGIN_SRC emacs-lisp
   (taiju/package-install 'undo-tree)
-  (undo-tree-mode 1)
+  (global-undo-tree-mode 1)
 #+END_SRC
 
 ** Twitter
