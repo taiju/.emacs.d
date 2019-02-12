@@ -169,7 +169,7 @@ Emacs Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にす�
     (set-face-attribute 'fixed-pitch nil :family f)
     (set-face-attribute 'variable-pitch nil :family f)
     (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f))
-    (add-to-list 'face-font-rescale-alist `(,f . 1.0)))
+    (add-to-list 'face-font-rescale-alist `(,f . 1.1)))
 #+END_SRC
 
 * ファイル全般
