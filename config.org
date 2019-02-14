@@ -47,18 +47,6 @@ melpa, org のパッケージアーカイブ URL を指定する。
   (toggle-frame-fullscreen)
 #+END_SRC
 
-ansi-term はいつも起動することになるので、最初から起動しておく。
-
-#+BEGIN_SRC emacs-lisp
-  (ansi-term "bash")
-#+END_SRC
-
-上記のままだと初期画面が ansi-term になってしまって辛いので ~*scratch*~ バッファに切り替える。
-
-#+BEGIN_SRC emacs-lisp
-  (setq initial-buffer-choice t)
-#+END_SRC
-
 * 見た目の設定
 
 ツールバーも、メニューバーも、スクロールバーもいらない。
