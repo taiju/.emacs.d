@@ -14,7 +14,7 @@ melpa, org のパッケージアーカイブ URL を指定する。
   (setq package-archives
 	'(("gnu" . "https://elpa.gnu.org/packages/")
 	  ("melpa" . "https://melpa.org/packages/")
-	  ("org" . "http://orgmode.org/elpa/")))
+	  ("org" . "https://orgmode.org/elpa/")))
 #+END_SRC
 
 パッケージを初期化する。
