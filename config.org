@@ -308,6 +308,14 @@ Ido を有効にする。
 
 言わずもがな便利に使っている。
 
+*** 全般
+
+タスクを閉じる時に閉じた時間を記録するようにする。
+
+#+begin_src emacs-lisp
+  (setq org-log-done 'time)
+#+end_src
+
 *** org-capture
 
 キーバインドは標準的なやつ。
