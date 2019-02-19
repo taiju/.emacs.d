@@ -99,6 +99,12 @@ melpa, org のパッケージアーカイブ URL を指定する。
   (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+end_src
 
+Org モードで挿入される日付の書式等を環境で統一したいので、 ~system-time-locale~ を設定する。
+
+#+begin_src emacs-lisp
+  (setq system-time-locale "C")
+#+end_src
+
 * 日本語
 
 ** 言語環境
