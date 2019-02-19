@@ -93,6 +93,12 @@ melpa, org のパッケージアーカイブ URL を指定する。
   (global-set-key (kbd "<zenkaku-hankaku>") 'toggle-input-method)
 #+END_SRC
 
+バッファ一覧はフィルタとか使いたい時があるので ibuffer を使うようにする。
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+end_src
+
 * 日本語
 
 ** 言語環境
