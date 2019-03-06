@@ -358,6 +358,20 @@ ido-every-where でも補完対象が足りない。
   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 #+END_SRC
 
+*** flx-ido
+
+flx-ido を入れて、常にあいまい検索できるようにする。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'flx-ido)
+  (flx-ido-mode 1)
+#+end_src
+
+~flx-ido-use-faces~ が有効になるように標準のはオフる。
+
+#+begin_src emacs-lisp
+  (setq ido-use-faces nil)
+#+end_src
 
 ** Magit
 
