@@ -105,6 +105,12 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
   (setq system-time-locale "C")
 #+end_src
 
+日本語ファイル名を検索したりするので、 ~find-ls-option~ を調整して、ついでに表示結果も調整する。
+
+#+begin_src emacs-lisp
+  (setq find-ls-option '("-exec ls -ldh {} +" . "-ldh"))
+#+end_src
+
 * 日本語
 
 ** 言語環境
