@@ -334,7 +334,7 @@ Ido を有効にする。
   (setq org-log-done 'time)
 #+end_src
 
-*** org-capture
+*** org-capture/org-refile
 
 キーバインドは標準的なやつ。
 
@@ -348,17 +348,27 @@ Ido を有効にする。
 
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
-	`(("b" "Bucket List" entry (file ,(expand-file-name "bucket.org" org-directory))
+	`(("b" "Bucket List" entry (file+headline ,(expand-file-name "bucket.org" org-directory) "やりたいことリスト")
 	   "* TODO %?")
-	  ("w" "Wish List" entry (file ,(expand-file-name "wish.org" org-directory))
+	  ("w" "Wish List" entry (file+headline ,(expand-file-name "wish.org" org-directory) "ほしいものリスト")
 	   "* TODO %?")
-	  ("t" "TODO List" entry (file ,(expand-file-name "todo.org" org-directory))
+	  ("t" "TODO List" entry (file+headline ,(expand-file-name "todo.org" org-directory) "やることリスト")
 	   "* TODO %?")
-	  ("o" "Outsourcing List" entry (file ,(expand-file-name "outsourcing.org" org-directory))
+	  ("o" "Outsourcing List" entry (file+headline ,(expand-file-name "outsourcing.org" org-directory) "おねがいごとリスト")
 	   "* TODO %?")
 	  ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
 	   "* %?")))
 #+END_SRC
+
+上記で追加したタスクは、各ファイルにリファイルできるようにする。
+
+#+begin_src emacs-lisp
+  (setq org-refile-targets
+	'(("bucket.org" :level . 1)
+	  ("wish.org" :level . 1)
+	  ("todo.org" :level . 1)
+	  ("outsourcing.org" :level . 1)))
+#+end_src
 
 *** org-agenda
 
