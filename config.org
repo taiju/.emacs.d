@@ -144,25 +144,6 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
   (setq mozc-candidate-style 'echo-area)
 #+END_SRC
 
-* Emacs Lisp
-
-Emacs Lisp を編集しやすいようにする。
-
-Paredit をインストールする。
-
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'paredit)
-#+END_SRC
-
-Emacs Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-				    (show-paren-mode t)
-				    (enable-paredit-mode)
-				    (eldoc-mode t)))
-#+END_SRC
-
 * フォント
 
 フォントは Ricty を使う。
@@ -215,6 +196,95 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
 	  (t
 	   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 	   (message "delete-trailing-whitespace: ON"))))
+#+END_SRC
+
+* プログラミング
+
+ここにはプログラミングに関する設定を書いていく。
+
+** プロジェクト管理
+
+プロジェクト管理には projectile を使う。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'projectile)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+end_src
+
+** 補完
+
+コード等の補完は company-mode を使う。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'company)
+#+END_SRC
+
+使えるタイミングでは常に使いたいので、 ~global-company-mode~ を有効する。
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+
+補完候補はすぐ出て欲しいので delay しない。
+
+#+BEGIN_SRC emacs-lisp
+  (setq company-idle-delay 0)
+#+END_SRC
+
+** シンタックスチェック
+
+シンタックスチェックは flycheck を使う。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'flycheck)
+#+end_src
+
+flycheck の ON/OFF は別のモードで。
+
+** コードスニペット
+
+コードスニペットは yasnippet を使う。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'yasnippet)
+  (taiju/package-install 'yasnippet-snippets)
+  (yas-global-mode 1)
+#+end_src
+
+** company と yasnippet の連携
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c y") 'company-yasnippet)
+#+end_src
+
+** LSP
+
+LSP ベースの各プログラミング開発環境を利用したいので、lsp-mode と company-lsp を入れる。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'lsp-mode)
+  (taiju/package-install 'lsp-ui)
+  (taiju/package-install 'company-lsp)
+#+end_src
+
+** Emacs Lisp
+
+Emacs Lisp を編集しやすいようにする。
+
+Paredit をインストールする。
+
+#+BEGIN_SRC emacs-lisp
+  (taiju/package-install 'paredit)
+#+END_SRC
+
+Emacs Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+				    (show-paren-mode t)
+				    (enable-paredit-mode)
+				    (eldoc-mode t)))
 #+END_SRC
 
 * 各種パッケージ
@@ -288,25 +358,6 @@ ido-every-where でも補完対象が足りない。
   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 #+END_SRC
 
-** company-mode
-
-コード等の補完は company-mode を使う。
-
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'company)
-#+END_SRC
-
-使えるタイミングでは常に使いたいので、 ~global-company-mode~ を有効する。
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook 'global-company-mode)
-#+END_SRC
-
-補完候補はすぐ出て欲しいので delay しない。
-
-#+BEGIN_SRC emacs-lisp
-  (setq company-idle-delay 0)
-#+END_SRC
 
 ** Magit
 
