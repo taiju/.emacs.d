@@ -148,15 +148,12 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
 
 フォントは Ricty を使う。
 
-標準だと org-mode の表がずれたりするので、半角と全角が1:2になるようにスケールも調整する。
-
 #+BEGIN_SRC emacs-lisp
   (let ((f "Ricty"))
-    (set-face-attribute 'default nil :family f :height 110)
+    (set-face-attribute 'default nil :family f :height 120)
     (set-face-attribute 'fixed-pitch nil :family f)
     (set-face-attribute 'variable-pitch nil :family f)
-    (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f))
-    (add-to-list 'face-font-rescale-alist `(,f . 1.1)))
+    (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f)))
 #+END_SRC
 
 * ファイル全般
