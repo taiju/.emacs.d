@@ -278,10 +278,11 @@ Paredit をインストールする。
 Emacs Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-				    (show-paren-mode t)
-				    (enable-paredit-mode)
-				    (eldoc-mode t)))
+  (defun emacs-lisp-mode-hooks ()
+    (show-paren-mode t)
+    (enable-paredit-mode)
+    (eldoc-mode t))
+  (add-hook 'emacs-lisp-mode-hook #'emacs-lisp-mode-hooks)
 #+END_SRC
 
 ** Go
@@ -290,11 +291,12 @@ Go の開発環境を整える。
 
 #+begin_src emacs-lisp
   (taiju/package-install 'go-mode)
-  (add-hook 'go-mode-hook '(lambda ()
-			     (lsp)
-			     (flycheck-mode)
-			     (setq tab-width 4
-				   c-basic-offset 4)))
+  (defun go-mode-hooks ()
+    (lsp)
+    (flycheck-mode)
+    (setq tab-width 4
+	  c-basic-offset 4))
+  (add-hook 'go-mode-hook #'go-mode-hooks)
 #+end_src
 
 * 各種パッケージ
