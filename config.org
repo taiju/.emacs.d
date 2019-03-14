@@ -322,6 +322,12 @@ Go の開発環境を整える。
   (add-hook 'go-mode-hook #'go-mode-hooks)
 #+end_src
 
+Org モードでも使うので、ob-go も入れておく。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'ob-go)
+#+end_src
+
 * 各種パッケージ
 
 ここからは各種パッケージの個別設定を書いていく。
@@ -501,7 +507,8 @@ Ido を有効にする。
      (dot . t)
      (sql . t)
      (shell . t)
-     (perl . t)))
+     (perl . t)
+     (go . t)))
 #+END_SRC
 
 ** undo-tree
