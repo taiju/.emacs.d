@@ -571,7 +571,7 @@ org-mode とかで絵文字使いたい時があるので emojify を入れて�
 org-mode で有効化しておく。
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook (lambda () (emojify-mode)))
+  (add-hook 'org-mode-hook #'emojify-mode)
 #+END_SRC
 
 絵文字のテスト:ok_hand:
