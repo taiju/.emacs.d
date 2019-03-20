@@ -265,9 +265,11 @@ LSP ベースの各プログラミング開発環境を利用したいので、l
   (taiju/package-install 'company-lsp)
 #+end_src
 
-** Emacs Lisp
+** Lisp
 
-Emacs Lisp を編集しやすいようにする。
+Emacs Lisp と Common Lisp の共通の設定。
+
+Lisp を編集しやすいようにする。
 
 Paredit をインストールする。
 
@@ -275,15 +277,36 @@ Paredit をインストールする。
   (taiju/package-install 'paredit)
 #+END_SRC
 
-Emacs Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
+Emacs Lisp と Common Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
 
 #+BEGIN_SRC emacs-lisp
-  (defun emacs-lisp-mode-hooks ()
+  (defun lisps-mode-hooks ()
     (show-paren-mode t)
     (enable-paredit-mode)
     (eldoc-mode t))
-  (add-hook 'emacs-lisp-mode-hook #'emacs-lisp-mode-hooks)
+  (mapc (lambda (hook) (add-hook hook #'lisps-mode-hooks))
+	'(emacs-lisp-mode-hook
+	  ielm-mode-hook
+	  lisp-mode-hook
+	  lisp-interaction-mode-hook
+	  slime-repl-mode-hook
+	  eval-expression-minibuffer-setup-hook))
 #+END_SRC
+
+*** Common Lisp
+
+SLIME をインストールする。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'slime)
+  (setq slime-contribs '(slime-fancy slime-quicklisp slime-asdf))
+#+end_src
+
+処理系は SBCL を使う。
+
+#+begin_src emacs-lisp
+  (setq inferior-lisp-program "sbcl")
+#+end_src
 
 ** Go
 
