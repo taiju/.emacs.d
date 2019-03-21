@@ -96,7 +96,7 @@ melpa, org のパッケージアーカイブ URL を指定する。
 バッファ一覧はフィルタとか使いたい時があるので ibuffer を使うようにする。
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
 #+end_src
 
 Org モードで挿入される日付の書式等を環境で統一したいので、 ~system-time-locale~ を設定する。
