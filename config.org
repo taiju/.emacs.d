@@ -116,6 +116,19 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
 #+begin_src emacs-lisp
   (setq browse-url-browser-function #'eww-browse-url)
 #+end_src
+
+ヘルプを多用するが、Helpful パッケージ試用してみたら圧倒的に読みやすかったので、インストールして標準のキーバインドをすべて置き換える。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'helpful)
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h F") #'helpful-function)
+  (global-set-key (kbd "C-h C") #'helpful-command)
+#+end_src
+
 * 日本語
 
 ** 言語環境
