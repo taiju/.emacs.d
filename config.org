@@ -111,6 +111,11 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
   (setq find-ls-option '("-exec ls -ldh {} +" . "-ldh"))
 #+end_src
 
+デフォルトのブラウザは eww にする。
+
+#+begin_src emacs-lisp
+  (setq browse-url-browser-function #'eww-browse-url)
+#+end_src
 * 日本語
 
 ** 言語環境
