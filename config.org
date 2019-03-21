@@ -299,7 +299,7 @@ SLIME をインストールする。
 
 #+begin_src emacs-lisp
   (taiju/package-install 'slime)
-  (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-company))
+  (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-company slime-fuzzy))
 #+end_src
 
 処理系は SBCL を使う。
