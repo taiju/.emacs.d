@@ -476,6 +476,13 @@ Ido を有効にする。
   (setq org-log-done 'time)
 #+end_src
 
+org-todo-keywords を設定する。
+
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "DOING(i!)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+#+end_src
+
 *** org-capture/org-refile
 
 キーバインドは標準的なやつ。
