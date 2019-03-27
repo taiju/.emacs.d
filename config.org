@@ -358,6 +358,14 @@ Org モードでも使うので、ob-go も入れておく。
   (taiju/package-install 'ob-go)
 #+end_src
 
+** 汎用データフォーマット
+
+Emacs 標準で入っていない汎用データフォーマット用のパッケージを追加する。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'json-mode)
+  (taiju/package-install 'yaml-mode)
+#+end_src
 * 各種パッケージ
 
 ここからは各種パッケージの個別設定を書いていく。
