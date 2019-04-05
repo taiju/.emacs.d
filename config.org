@@ -323,6 +323,7 @@ SLIME をインストールする。
 
 #+begin_src emacs-lisp
   (taiju/package-install 'slime)
+  (taiju/package-install 'slime-company)
 #+end_src
 
 その他、SLIME の設定をする。
