@@ -489,7 +489,7 @@ org-todo-keywords を設定する。
 
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-	'((sequence "TODO(t)" "DOING(i!)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+	'((sequence "TODO(t)" "DOING(i!)" "WAIT(w@/!)" "|" "DONE(d@)" "CANCELED(c@)")))
 #+end_src
 
 *** org-capture/org-refile
