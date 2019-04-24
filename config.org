@@ -629,6 +629,16 @@ org-mode で有効化しておく。
 
 絵文字のテスト:ok_hand:
 
+** ox-*
+
+*** ox-gfm
+
+Org モードから Github Flavored Markdown をエクスポートできるようにする。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'ox-gfm)
+#+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
