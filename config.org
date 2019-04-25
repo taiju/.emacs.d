@@ -314,7 +314,10 @@ Emacs Lisp と Common Lisp で show-paren-mode と paredit-mode と eldoc-mode �
 	  lisp-mode-hook
 	  lisp-interaction-mode-hook
 	  slime-repl-mode-hook
-	  eval-expression-minibuffer-setup-hook))
+	  eval-expression-minibuffer-setup-hook
+	  clojure-mode-hook
+	  cider-mode-hook
+	  cider-repl-mode-hook))
 #+END_SRC
 
 *** Common Lisp
@@ -337,6 +340,14 @@ SLIME をインストールする。
 
 #+begin_src emacs-lisp
   (setq inferior-lisp-program "sbcl")
+#+end_src
+
+*** Clojure
+
+本当は Abcl 使いたいところだけど、今のところ Java の資産使うなら Clojure 使った方が良い。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'cider)
 #+end_src
 
 ** Go
