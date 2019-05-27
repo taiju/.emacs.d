@@ -557,6 +557,10 @@ org-todo-keywords を設定する。
 
 いろいろ org-babel で実行できるようにしておく。
 
+#+begin_src emacs-lisp
+  (taiju/package-install 'ob-http)
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -565,7 +569,8 @@ org-todo-keywords を設定する。
      (sql . t)
      (shell . t)
      (perl . t)
-     (go . t)))
+     (go . t)
+     (http . t)))
 #+END_SRC
 
 ** undo-tree
