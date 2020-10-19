@@ -20,6 +20,7 @@ melpa, org のパッケージアーカイブ URL を指定する。
 パッケージを初期化する。
 
 #+BEGIN_SRC emacs-lisp
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
   (package-initialize)
 #+END_SRC
 
@@ -67,10 +68,10 @@ melpa, org のパッケージアーカイブ URL を指定する。
 
 ** テーマ
 
-とりあえず、標準で入っている leuven を使う。
+標準で入っている adwaita を使う。
 
  #+BEGIN_SRC emacs-lisp
-   (load-theme 'leuven t)
+   (load-theme 'adwaita t)
  #+END_SRC
 
 * 挙動の調整
@@ -135,6 +136,12 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
   (electric-pair-mode t)
 #+end_src
 
+ベルの音は鳴らさないようにする。
+
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+#+end_src
+
 * 日本語
 
 ** 言語環境
@@ -173,8 +180,8 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
 フォントは Ricty を使う。
 
 #+BEGIN_SRC emacs-lisp
-  (let ((f "Ricty"))
-    (set-face-attribute 'default nil :family f :height 120)
+  (let ((f "Ricty Diminished"))
+    (set-face-attribute 'default nil :family f :height 130)
     (set-face-attribute 'fixed-pitch nil :family f)
     (set-face-attribute 'variable-pitch nil :family f)
     (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f)))
@@ -279,14 +286,34 @@ flycheck の ON/OFF は別のモードで。
   (global-set-key (kbd "C-c y") 'company-yasnippet)
 #+end_src
 
-** LSP
-
-LSP ベースの各プログラミング開発環境を利用したいので、lsp-mode と company-lsp を入れる。
+** editorconfig
+EditorConfig が効くようにしておく。
 
 #+begin_src emacs-lisp
+  (taiju/package-install 'editorconfig)
+  (editorconfig-mode t)
+#+end_src
+
+** Treemacs
+
+Projectile や lsp-mode で Treemacs を使う。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'treemacs)
+  (taiju/package-install 'treemacs-projectile)
+  (taiju/package-install 'treemacs-magit)
+  (taiju/package-install 'treemacs-icons-dired)
+#+end_src
+
+** LSP
+
+LSP ベースの各プログラミング開発環境を利用したいので、lsp-mode を入れる。
+
+#+begin_src emacs-lisp
+  (setq lsp-keymap-prefix "C-l")
   (taiju/package-install 'lsp-mode)
   (taiju/package-install 'lsp-ui)
-  (taiju/package-install 'company-lsp)
+  (taiju/package-install 'lsp-treemacs)
 #+end_src
 
 ** Lisp
@@ -370,6 +397,29 @@ Org モードでも使うので、ob-go も入れておく。
   (taiju/package-install 'ob-go)
 #+end_src
 
+** TypeScript
+TypeScript の開発環境。
+
+編集モードを入れる。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'typescript-mode)
+#+end_src
+
+LSPを使う。
+
+#+begin_src emacs-lisp
+  (add-hook 'typescript-mode-hook #'lsp)
+#+end_src
+
+拡張子が ~.tsx~ の時は ~web-mode~ を使う。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  (add-hook 'web-mode-hook #'lsp)
+#+end_src
+
 ** 汎用データフォーマット
 
 Emacs 標準で入っていない汎用データフォーマット用のパッケージを追加する。
@@ -378,6 +428,7 @@ Emacs 標準で入っていない汎用データフォーマット用のパッ�
   (taiju/package-install 'json-mode)
   (taiju/package-install 'yaml-mode)
 #+end_src
+
 * 各種パッケージ
 
 ここからは各種パッケージの個別設定を書いていく。
@@ -559,6 +610,7 @@ org-todo-keywords を設定する。
 
 #+begin_src emacs-lisp
   (taiju/package-install 'ob-http)
+  (taiju/package-install 'ob-deno)
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
@@ -570,8 +622,15 @@ org-todo-keywords を設定する。
      (shell . t)
      (perl . t)
      (go . t)
-     (http . t)))
+     (http . t)
+     (deno . t)))
 #+END_SRC
+
+ob-deno のソースは typescript-mode で表示・編集できるようにする。
+
+#+begin_src emacs-lisp
+  (add-to-list 'org-src-lang-modes '("deno" . typescript))
+#+end_src
 
 ** undo-tree
 
