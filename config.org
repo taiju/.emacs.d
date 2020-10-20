@@ -254,11 +254,12 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
   (add-hook 'after-init-hook 'global-company-mode)
 #+END_SRC
 
-補完候補はすぐ出て欲しいので delay しない。
+補完候補はすぐ出て欲しいので delay しない。最小文字数も1文字にする。
 
-#+BEGIN_SRC emacs-lisp
-  (setq company-idle-delay 0)
-#+END_SRC
+#+begin_src emacs-lisp
+  (setq company-minimum-prefix-length 1
+	company-idle-delay 0.0)
+#+end_src
 
 ** シンタックスチェック
 
