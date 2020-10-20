@@ -34,6 +34,14 @@ melpa, org のパッケージアーカイブ URL を指定する。
       (package-install pkg)))
 #+END_SRC
 
+* カスタムファイルの場所
+
+カスタムファイルは ~init.el~ とは別のパスに保存するようにする。
+
+#+begin_src emacs-lisp
+  (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+#+end_src
+
 * 起動時の設定
 
 スタートアップ画面は出さない。
