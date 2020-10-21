@@ -269,6 +269,17 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
 	company-idle-delay 0.0)
 #+end_src
 
+シェルを使う時は反応が悪くてストレスな時があるのでオフにする。
+
+#+begin_src emacs-lisp
+  (defun taiju/deactivate-company ()
+    (company-mode -1))
+
+  (add-hook 'shell-mode-hook #'taiju/deactivate-company)
+  (add-hook 'eshell-mode-hook #'taiju/deactivate-company)
+  (add-hook 'term-mode-hook #'taiju/deactivate-company)
+#+end_src
+
 ** シンタックスチェック
 
 シンタックスチェックは flycheck を使う。
