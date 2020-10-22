@@ -336,6 +336,12 @@ LSP ベースの各プログラミング開発環境を利用したいので、l
   (taiju/package-install 'lsp-treemacs)
 #+end_src
 
+lsp で which-key を使用する。
+
+#+begin_src emacs-lisp
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+#+end_src
+
 ** Lisp
 
 Emacs Lisp と Common Lisp の共通の設定。
