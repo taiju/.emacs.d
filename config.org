@@ -613,7 +613,7 @@ org-todo-keywords を設定する。
 	  ("o" "Outsourcing List" entry (file+headline ,(expand-file-name "outsourcing.org" org-directory) "おねがいごとリスト")
 	   "* TODO %?")
 	  ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
-	   "* %?")))
+	   "* %?%<%H:%M>")))
 #+END_SRC
 
 上記で追加したタスクは、各ファイルにリファイルできるようにする。
