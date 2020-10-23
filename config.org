@@ -352,6 +352,15 @@ lsp で which-key を使用する。
     (setq read-process-output-max (mb 1))
     (setq gc-cons-threshold (mb 100)))
 #+end_src
+
+*** ESlint 統合機能の設定
+
+参考: [[https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration][LSP ESlint integration]]
+
+#+begin_src emacs-lisp
+  (setq lsp-eslint-server-command `("node" ,(expand-file-name (car (last (file-expand-wildcards "~/.vscode-server/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
+#+end_src
+
 ** Lisp
 
 Emacs Lisp と Common Lisp の共通の設定。
