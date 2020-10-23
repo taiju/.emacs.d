@@ -76,10 +76,10 @@ melpa, org のパッケージアーカイブ URL を指定する。
 
 ** テーマ
 
-標準で入っている adwaita を使う。
+標準で入っている leuven を使う。
 
  #+BEGIN_SRC emacs-lisp
-   (load-theme 'adwaita t)
+   (load-theme 'leuven t)
  #+END_SRC
 
 * 挙動の調整
