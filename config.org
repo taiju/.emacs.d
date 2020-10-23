@@ -570,6 +570,15 @@ flx-ido を入れて、常にあいまい検索できるようにする。
   (setq ido-use-faces nil)
 #+end_src
 
+*** ido-at-point
+
+completion-at-point でも Ido を使えるようにするため、ido-at-point を追加インストールする。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'ido-at-point)
+  (ido-at-point-mode)
+#+end_src
+
 ** Magit
 
 最高の Git クライアント。
