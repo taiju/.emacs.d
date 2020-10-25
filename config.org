@@ -794,6 +794,18 @@ Org モードから Github Flavored Markdown をエクスポートできるよ�
   (taiju/package-install 'ox-gfm)
 #+end_src
 
+** multiple-cursors
+
+マルチカーソルな作業ができる ~multiple-cursors~ を使用する。キーバインドは公式ドキュメントのまま。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'multiple-cursors)
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
