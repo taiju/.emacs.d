@@ -806,6 +806,15 @@ Org モードから Github Flavored Markdown をエクスポートできるよ�
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+end_src
 
+** Swiper
+
+I-search を Swiper に置き換える。
+
+#+begin_src emacs-lisp
+  (taiju/package-install 'swiper)
+  (global-set-key "\C-s" 'swiper)
+#+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
