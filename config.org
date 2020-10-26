@@ -150,6 +150,12 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
   (setq visible-bell t)
 #+end_src
 
+選択範囲は入力内容で置き換わるようにする。
+
+#+begin_src emacs-lisp
+  (delete-selection-mode 1)
+#+end_src
+
 * 日本語
 
 ** 言語環境
