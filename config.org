@@ -254,6 +254,12 @@ POSIX のファイルの定義に則り、最終行に改行を入れる。
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 #+end_src
 
+プロジェクトにスイッチした時のアクションは ~projectile-vc~ にする。
+
+#+begin_src emacs-lisp
+  (setq projectile-switch-project-action #'projectile-vc)
+#+end_src
+
 ** 補完
 
 コード等の補完は company-mode を使う。
