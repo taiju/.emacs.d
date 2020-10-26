@@ -360,6 +360,13 @@ lsp で which-key を使用する。
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
 #+end_src
 
+ダーク系テーマに最適化されているっぽくて、一部デフォルト faces がライト系テーマでは明るくて見えないので調整する。
+
+#+begin_src emacs-lisp
+  (require 'lsp-ui)
+  (set-face-attribute 'lsp-ui-sideline-code-action nil :foreground "dim gray")
+#+end_src
+
 パフォーマンスに関係する項目の設定。（メインマシン用）
 
 参考: [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance - LSP Mode - LSP support for Emacs]]
