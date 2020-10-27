@@ -400,12 +400,21 @@ lsp で which-key を使用する。
   (setq lsp-eslint-server-command `("node" ,(expand-file-name (car (last (file-expand-wildcards "~/.vscode-server/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
 #+end_src
 
-*** lsp-java
+** Java
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'lsp-java)
-  (add-hook 'java-mode-hook #'lsp)
-#+end_src
+   LSPを使うようにする。ついでにインデント設定等のデフォルト設定もする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'lsp-java)
+
+     (defun taiju/java-mode-init ()
+       (lsp)
+       (setq c-basic-offset 4
+	     tab-width 4
+	     indent-tabs-mode nil))
+
+     (add-hook 'java-mode-hook #'taiju/java-mode-init)
+   #+end_src
 
 ** Lisp
 
