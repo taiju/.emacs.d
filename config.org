@@ -349,6 +349,14 @@ treemacs のウィンドウに切り替えるためのキーバインドを設�
   (global-set-key (kbd "M-0") #'treemacs-select-window)
 #+end_src
 
+** dap-mode
+
+   デバッガとして dap-mode を使う。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'dap-mode)
+   #+end_src
+
 ** LSP
 
 LSP ベースの各プログラミング開発環境を利用したいので、lsp-mode を入れる。
