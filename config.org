@@ -851,6 +851,13 @@ I-search を Swiper に置き換える。
 
    ~docker~ パッケージの依存関係に ~docker-tramp~ パッケージが含まれているので、TRAMP を使ってコンテナ内のファイルを編集できる。(~/docker:<image-id>/path/to/file~)
 
+** sudo-edit
+   sudo しないと編集できないファイルを sudo せずに開いた時に、少ない手順で sudo して開き直せるようにする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'sudo-edit)
+   #+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
