@@ -841,6 +841,16 @@ I-search を Swiper に置き換える。
   (global-set-key (kbd "\C-s") #'swiper)
 #+end_src
 
+** Docker
+   Docker のクライアントを使う。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'docker)
+     (global-set-key (kbd "C-c d") #'docker)
+   #+end_src
+
+   ~docker~ パッケージの依存関係に ~docker-tramp~ パッケージが含まれているので、TRAMP を使ってコンテナ内のファイルを編集できる。(~/docker:<image-id>/path/to/file~)
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
