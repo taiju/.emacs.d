@@ -687,16 +687,14 @@ org-todo-keywords を設定する。
 
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
-	`(("b" "Bucket List" entry (file+headline ,(expand-file-name "bucket.org" org-directory) "やりたいことリスト")
-	   "* TODO %?")
-	  ("w" "Wish List" entry (file+headline ,(expand-file-name "wish.org" org-directory) "ほしいものリスト")
-	   "* TODO %?")
-	  ("t" "TODO List" entry (file+headline ,(expand-file-name "todo.org" org-directory) "やることリスト")
-	   "* TODO %?")
-	  ("o" "Outsourcing List" entry (file+headline ,(expand-file-name "outsourcing.org" org-directory) "おねがいごとリスト")
-	   "* TODO %?")
-	  ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
-	   "* %?%<%H:%M>")))
+        `(("b" "Bucket List" entry (file+headline ,(expand-file-name "bucket.org" org-directory) "やりたいことリスト")
+           "* TODO %?")
+          ("w" "Wish List" entry (file+headline ,(expand-file-name "wish.org" org-directory) "ほしいものリスト")
+           "* TODO %?")
+          ("t" "TODO List" entry (file+headline ,(expand-file-name "todo.org" org-directory) "やることリスト")
+           "* TODO %?")
+          ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
+           "* %?%<%H:%M>")))
 #+END_SRC
 
 上記で追加したタスクは、各ファイルにリファイルできるようにする。
