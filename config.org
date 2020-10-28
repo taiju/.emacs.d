@@ -881,6 +881,15 @@ I-search を Swiper に置き換える。
      (taiju/package-install 'sudo-edit)
    #+end_src
 
+** God Mode
+
+   疲れた時なんかに神になりたい時もある。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'god-mode)
+     (global-set-key (kbd "C-c g") #'god-local-mode)
+   #+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
