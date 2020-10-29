@@ -721,6 +721,12 @@ org-todo-keywords を設定する。
   (setq org-agenda-files (list org-directory))
 #+END_SRC
 
+祝日を表示する。
+
+#+begin_src emacs-lisp
+  (setq org-agenda-include-diary t)
+#+end_src
+
 *** org-babel
 
 いろいろ org-babel で実行できるようにしておく。
@@ -887,6 +893,30 @@ I-search を Swiper に置き換える。
      (taiju/package-install 'god-mode)
      (global-set-key (kbd "<escape>") #'god-local-mode)
    #+end_src
+
+** calendar
+
+   祝日をカレンダーに表示する。
+
+   #+begin_src emacs-lisp
+     (setq calendar-mark-holidays-flag t)
+   #+end_src
+
+** japanese-holidays.el
+
+   calendar や Org モードで日本の祝日を反映させるために、japenese-holidays.el をインストールする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'japanese-holidays)
+   #+end_src
+
+   [[https://github.com/emacs-jp/japanese-holidays][公式ドキュメント]]を参考に日本の祝日を追加する。
+
+   #+begin_src emacs-lisp :noweb yes
+     (with-eval-after-load "holidays"
+       (require 'japanese-holidays)
+       (setq calendar-holidays
+                (append japanese-holidays holiday-local-holidays holiday-other-holidays)))
    #+end_src
 
 * Footnotes
