@@ -700,11 +700,17 @@ org-todo-keywords を設定する。
 上記で追加したタスクは、各ファイルにリファイルできるようにする。
 
 #+begin_src emacs-lisp
-  (setq org-refile-targets
-	'(("bucket.org" :level . 1)
-	  ("wish.org" :level . 1)
-	  ("todo.org" :level . 1)
-	  ("outsourcing.org" :level . 1)))
+  (cl-labels ((basename-to-filename (basename)
+                                    (concat basename ".org"))
+              (filename-to-path (filename)
+                                (string-join (list org-directory filename) "/"))
+              (path-to-refile-target (path)
+                                     (cons path (cons :level 1))))
+    (let* ((basenames '("bucket" "wish" "todo" "notes"))
+           (filenames (mapcar #'basename-to-filename basenames))
+           (paths (mapcar #'filename-to-path filenames))
+           (refile-targets (mapcar #'path-to-refile-target paths)))
+      (setq org-refile-targets refile-targets)))
 #+end_src
 
 *** org-agenda
