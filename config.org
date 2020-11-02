@@ -650,8 +650,6 @@ Ido を有効にする。
 
 ** Org
 
-言わずもがな便利に使っている。
-
 *** 全般
 
 最新版をインストールする。
@@ -678,39 +676,24 @@ org-todo-keywords を設定する。
 キーバインドは標準的なやつ。
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "\C-cc") #'org-capture)
+  (global-set-key (kbd "C-c c") #'org-capture)
 #+END_SRC
 
 テンプレートは下記。
 
-基本的にほとんど TODO リストだけど、内容に応じて収集先を適宜変えている。
-
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
-        `(("b" "Bucket List" entry (file+headline ,(expand-file-name "bucket.org" org-directory) "やりたいことリスト")
-           "* TODO %?")
-          ("w" "Wish List" entry (file+headline ,(expand-file-name "wish.org" org-directory) "ほしいものリスト")
-           "* TODO %?")
-          ("t" "TODO List" entry (file+headline ,(expand-file-name "todo.org" org-directory) "やることリスト")
+        `(("t" "TODO" entry (file ,(expand-file-name "inbox.org" org-directory))
            "* TODO %?")
           ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
            "* %?%<%H:%M>")))
 #+END_SRC
 
-上記で追加したタスクは、各ファイルにリファイルできるようにする。
+上記で追加したタスクなどは project.org に整理できるようにする。
 
 #+begin_src emacs-lisp
-  (cl-labels ((basename-to-filename (basename)
-                                    (concat basename ".org"))
-              (filename-to-path (filename)
-                                (string-join (list org-directory filename) "/"))
-              (path-to-refile-target (path)
-                                     (cons path (cons :level 1))))
-    (let* ((basenames '("bucket" "wish" "todo" "notes"))
-           (filenames (mapcar #'basename-to-filename basenames))
-           (paths (mapcar #'filename-to-path filenames))
-           (refile-targets (mapcar #'path-to-refile-target paths)))
-      (setq org-refile-targets refile-targets)))
+  (setq org-refile-targets
+        `((,(string-join (list org-directory "project.org") "/") :maxlevel . 3)))
 #+end_src
 
 *** org-agenda
@@ -718,7 +701,7 @@ org-todo-keywords を設定する。
 キーバインドは標準的なやつ。
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "\C-ca") #'org-agenda)
+  (global-set-key (kbd "C-c a") #'org-agenda)
 #+END_SRC
 
 ~org-directory~ を ~org-agenda-files~ に設定する。
