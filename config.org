@@ -925,6 +925,16 @@ I-search を Swiper に置き換える。
                 (append japanese-holidays holiday-local-holidays holiday-other-holidays)))
    #+end_src
 
+** graphql-mode
+
+   GraphQL の編集等ができるように graphql-mode をインストールする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'graphql-mode)
+   #+end_src
+
+   #+RESULTS:
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
