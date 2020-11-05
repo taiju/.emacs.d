@@ -481,22 +481,17 @@ SLIME をインストールする。
 
 Go の開発環境を整える。
 
-#+begin_src emacs-lisp :noweb yes
+#+begin_src emacs-lisp
   (taiju/package-install 'go-mode)
   (defun taiju/go-mode-init ()
+    (require 'dap-go)
     (lsp)
     (flycheck-mode)
     (setq tab-width 4
           c-basic-offset 4)
-    <<taiju/go-mode-init#before-save-hook>>)
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
   (add-hook 'go-mode-hook #'taiju/go-mode-init)
-#+end_src
-
-保存時のフック（go モードローカル）で、フォーマットと import 文の整理が実行されるようにする。
-
-#+begin_src emacs-lisp :noweb-ref taiju/go-mode-init#before-save-hook
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t)
 #+end_src
 
 Org モードでも使うので、ob-go も入れておく。
