@@ -197,15 +197,13 @@ Org モードで挿入される日付の書式等を環境で統一したいの�
 
 * フォント
 
-フォントは Ricty を使う。
-
-#+BEGIN_SRC emacs-lisp
-  (let ((f "Ricty Diminished"))
+#+begin_src emacs-lisp
+  (let ((f "HackGenNerd Console"))
     (set-face-attribute 'default nil :family f :height 120)
     (set-face-attribute 'fixed-pitch nil :family f)
     (set-face-attribute 'variable-pitch nil :family f)
     (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f)))
-#+END_SRC
+#+end_src
 
 * ファイル全般
 
