@@ -762,11 +762,30 @@ Twitter クライアントは Emacs で事足りる。
   (taiju/package-install 'twittering-mode)
 #+END_SRC
 
-パスワードを保存する。
+マスターパスワードを使って、トークンを保存する。
 
 #+BEGIN_SRC emacs-lisp
   (setq twittering-use-master-password t)
 #+END_SRC
+
+GPG の比較的新しいバージョンを使っている場合は、上記のマスターパスワードの入力ができずエラーになり、起動のたび PIN の入力が必要になる。
+
+下記の記事を参考に、パスフレーズの入力を標準入力から入力できるようにしておく必要がある。
+https://blog.web-apps.tech/emacs-mac-twittering-mode-every-asked-pin/
+
+*** `~/.gnupg/gpg-agent.conf`
+
+    #+begin_example
+      allow-loopback-pinentry
+    #+end_example
+
+*** `~/.gnupg/gpg.conf`
+
+    #+begin_example
+      pinentry-mode loopback
+    #+end_example
+
+※ 上記の設定によって、gpg の他の機能が使えなくなる可能性があるらしいので、問題が生じたらやめる。
 
 ** which-key
 
