@@ -14,352 +14,352 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
 * パッケージ設定
 
-何はなくともパッケージ。
+  何はなくともパッケージ。
 
-melpa, org のパッケージアーカイブ URL を指定する。
+  melpa, org のパッケージアーカイブ URL を指定する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq package-archives
-	'(("gnu" . "https://elpa.gnu.org/packages/")
-	  ("melpa" . "https://melpa.org/packages/")
-	  ("org" . "https://orgmode.org/elpa/")))
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq package-archives
+          '(("gnu" . "https://elpa.gnu.org/packages/")
+            ("melpa" . "https://melpa.org/packages/")
+            ("org" . "https://orgmode.org/elpa/")))
+  #+END_SRC
 
-パッケージを初期化する。
+  パッケージを初期化する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-  (package-initialize)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+    (package-initialize)
+  #+END_SRC
 
-パッケージが未インストールの場合は起動時にインストールされるようにしたいので、そんな感じのカスタム関数を定義しておく。
+  パッケージが未インストールの場合は起動時にインストールされるようにしたいので、そんな感じのカスタム関数を定義しておく。
 
-#+BEGIN_SRC emacs-lisp
-  (defun taiju/package-install (pkg)
-    (unless (package-installed-p pkg)
-      (unless package-archive-contents
-	(package-refresh-contents))
-      (package-install pkg)))
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (defun taiju/package-install (pkg)
+      (unless (package-installed-p pkg)
+        (unless package-archive-contents
+          (package-refresh-contents))
+        (package-install pkg)))
+  #+END_SRC
 
 * カスタムファイルの場所
 
-カスタムファイルは ~init.el~ とは別のパスに保存するようにする。
+  カスタムファイルは ~init.el~ とは別のパスに保存するようにする。
 
-#+begin_src emacs-lisp
-  (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
-#+end_src
+  #+begin_src emacs-lisp
+    (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+  #+end_src
 
 * 起動時の設定
 
-スタートアップ画面は出さない。
+  スタートアップ画面は出さない。
 
-#+BEGIN_SRC emacs-lisp
-  (setq inhibit-startup-message t)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq inhibit-startup-message t)
+  #+END_SRC
 
-起動直後からフルスクリーン化する。
+  起動直後からフルスクリーン化する。
 
-#+BEGIN_SRC emacs-lisp
-  (toggle-frame-fullscreen)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (toggle-frame-fullscreen)
+  #+END_SRC
 
 * 見た目の設定
 
-ツールバーも、メニューバーも、スクロールバーもいらない。
+  ツールバーも、メニューバーも、スクロールバーもいらない。
 
-#+BEGIN_SRC emacs-lisp
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (tool-bar-mode -1)
+    (menu-bar-mode -1)
+    (scroll-bar-mode -1)
+  #+END_SRC
 
-フルスクリーンだと時間とかバッテリー残量とかが見えなくて困るので、モードラインに表示する。
+  フルスクリーンだと時間とかバッテリー残量とかが見えなくて困るので、モードラインに表示する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq display-time-format "%m-%d %H:%M")
-  (display-time)
-  (display-battery-mode t)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq display-time-format "%m-%d %H:%M")
+    (display-time)
+    (display-battery-mode t)
+  #+END_SRC
 
 ** テーマ
 
-標準で入っている leuven を使う。
+   標準で入っている leuven を使う。
 
- #+BEGIN_SRC emacs-lisp
-   (load-theme 'leuven t)
- #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (load-theme 'leuven t)
+   #+END_SRC
 
 * 挙動の調整
 
-スクロール時に画面が動きすぎる問題を解消する。
+  スクロール時に画面が動きすぎる問題を解消する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq scroll-conservatively 100)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq scroll-conservatively 100)
+  #+END_SRC
 
-質問の重要度に関わらずは y or n で答えたい。
+  質問の重要度に関わらずは y or n で答えたい。
 
-#+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (fset 'yes-or-no-p 'y-or-n-p)
+  #+END_SRC
 
-つい癖で全角半角キーで日本語入力を切り替えてしまうので、全角半角キーにも ~toggle-input-method~ を割り当てておく。
+  つい癖で全角半角キーで日本語入力を切り替えてしまうので、全角半角キーにも ~toggle-input-method~ を割り当てておく。
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<zenkaku-hankaku>") #'toggle-input-method)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "<zenkaku-hankaku>") #'toggle-input-method)
+  #+END_SRC
 
-バッファ一覧はフィルタとか使いたい時があるので ibuffer を使うようにする。
+  バッファ一覧はフィルタとか使いたい時があるので ibuffer を使うようにする。
 
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-x C-b") #'ibuffer)
-#+end_src
+  #+begin_src emacs-lisp
+    (global-set-key (kbd "C-x C-b") #'ibuffer)
+  #+end_src
 
-Org モードで挿入される日付の書式等を環境で統一したいので、 ~system-time-locale~ を設定する。
+  Org モードで挿入される日付の書式等を環境で統一したいので、 ~system-time-locale~ を設定する。
 
-#+begin_src emacs-lisp
-  (setq system-time-locale "C")
-#+end_src
+  #+begin_src emacs-lisp
+    (setq system-time-locale "C")
+  #+end_src
 
-日本語ファイル名を検索したりするので、 ~find-ls-option~ を調整して、ついでに表示結果も調整する。
+  日本語ファイル名を検索したりするので、 ~find-ls-option~ を調整して、ついでに表示結果も調整する。
 
-#+begin_src emacs-lisp
-  (setq find-ls-option '("-exec ls -ldh {} +" . "-ldh"))
-#+end_src
+  #+begin_src emacs-lisp
+    (setq find-ls-option '("-exec ls -ldh {} +" . "-ldh"))
+  #+end_src
 
-デフォルトのブラウザは eww にする。
+  デフォルトのブラウザは eww にする。
 
-#+begin_src emacs-lisp
-  (setq browse-url-browser-function #'eww-browse-url)
-#+end_src
+  #+begin_src emacs-lisp
+    (setq browse-url-browser-function #'eww-browse-url)
+  #+end_src
 
-ヘルプを多用するが、Helpful パッケージ試用してみたら圧倒的に読みやすかったので、インストールして標準のキーバインドをすべて置き換える。
+  ヘルプを多用するが、Helpful パッケージ試用してみたら圧倒的に読みやすかったので、インストールして標準のキーバインドをすべて置き換える。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'helpful)
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
-  (global-set-key (kbd "C-h F") #'helpful-function)
-  (global-set-key (kbd "C-h C") #'helpful-command)
-#+end_src
+  #+begin_src emacs-lisp
+    (taiju/package-install 'helpful)
+    (global-set-key (kbd "C-h f") #'helpful-callable)
+    (global-set-key (kbd "C-h v") #'helpful-variable)
+    (global-set-key (kbd "C-h k") #'helpful-key)
+    (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+    (global-set-key (kbd "C-h F") #'helpful-function)
+    (global-set-key (kbd "C-h C") #'helpful-command)
+  #+end_src
 
-対応するカッコを常に自動入力するようにする。
+  対応するカッコを常に自動入力するようにする。
 
-#+begin_src emacs-lisp
-  (electric-pair-mode t)
-#+end_src
+  #+begin_src emacs-lisp
+    (electric-pair-mode t)
+  #+end_src
 
-ベルの音は鳴らさないようにする。
+  ベルの音は鳴らさないようにする。
 
-#+begin_src emacs-lisp
-  (setq visible-bell t)
-#+end_src
+  #+begin_src emacs-lisp
+    (setq visible-bell t)
+  #+end_src
 
-選択範囲は入力内容で置き換わるようにする。
+  選択範囲は入力内容で置き換わるようにする。
 
-#+begin_src emacs-lisp
-  (delete-selection-mode 1)
-#+end_src
+  #+begin_src emacs-lisp
+    (delete-selection-mode 1)
+  #+end_src
 
-インデントはデフォルトでスペースにする。
+  インデントはデフォルトでスペースにする。
 
-#+begin_src emacs-lisp
-  (setq-default indent-tabs-mode nil)
-#+end_src
+  #+begin_src emacs-lisp
+    (setq-default indent-tabs-mode nil)
+  #+end_src
 
-ナローイングを許可する。
+  ナローイングを許可する。
 
-#+begin_src emacs-lisp
-  (put 'narrow-to-region 'disabled nil)
-#+end_src
+  #+begin_src emacs-lisp
+    (put 'narrow-to-region 'disabled nil)
+  #+end_src
 
 * 日本語
 
 ** 言語環境
 
-言語環境を日本語にする。
+   言語環境を日本語にする。
 
-#+BEGIN_SRC emacs-lisp
-  (set-language-environment "Japanese")
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (set-language-environment "Japanese")
+   #+END_SRC
 
 ** 文字コード
 
-文字コードは UTF-8 を優先。
+   文字コードは UTF-8 を優先。
 
-#+BEGIN_SRC emacs-lisp
-  (prefer-coding-system 'utf-8)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (prefer-coding-system 'utf-8)
+   #+END_SRC
 
 ** 日本語入力
 
-日本語入力は mozc 一択。[fn:mozc]
+   日本語入力は mozc 一択。[fn:mozc]
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'mozc)
-  (setq default-input-method "japanese-mozc")
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'mozc)
+     (setq default-input-method "japanese-mozc")
+   #+END_SRC
 
-デフォルトのスタイルはちょっとうるさいので、スタイルを変更する。
+   デフォルトのスタイルはちょっとうるさいので、スタイルを変更する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq mozc-candidate-style 'echo-area)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq mozc-candidate-style 'echo-area)
+   #+END_SRC
 
 * フォント
 
-#+begin_src emacs-lisp
-  (let ((f "HackGenNerd Console"))
-    (set-face-attribute 'default nil :family f :height 120)
-    (set-face-attribute 'fixed-pitch nil :family f)
-    (set-face-attribute 'variable-pitch nil :family f)
-    (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f)))
-#+end_src
+  #+begin_src emacs-lisp
+    (let ((f "HackGenNerd Console"))
+      (set-face-attribute 'default nil :family f :height 120)
+      (set-face-attribute 'fixed-pitch nil :family f)
+      (set-face-attribute 'variable-pitch nil :family f)
+      (set-fontset-font nil 'japanese-jisx0208 (font-spec :family f)))
+  #+end_src
 
 * ファイル全般
 
-自動保存しない。
+  自動保存しない。
 
-#+BEGIN_SRC emacs-lisp
-  (setq auto-save-default nil)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq auto-save-default nil)
+  #+END_SRC
 
-バックアップも作らない。
+  バックアップも作らない。
 
-#+BEGIN_SRC emacs-lisp
-  (setq make-backup-files nil)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq make-backup-files nil)
+  #+END_SRC
 
-POSIX のファイルの定義に則り、最終行に改行を入れる。
+  POSIX のファイルの定義に則り、最終行に改行を入れる。
 
-#+BEGIN_SRC emacs-lisp
-  (setq require-final-newline t)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq require-final-newline t)
+  #+END_SRC
 
-保存時に余計なホワイトスペースを削除するようにする。
+  保存時に余計なホワイトスペースを削除するようにする。
 
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'before-save-hook #'delete-trailing-whitespace)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'before-save-hook #'delete-trailing-whitespace)
+  #+END_SRC
 
-基本はこれで良いんだけど、Git 管理下のファイル等で diff が出過ぎて辛いことになったりする場合は、 OFF にできるようにカスタムコマンドを定義しておく。
+  基本はこれで良いんだけど、Git 管理下のファイル等で diff が出過ぎて辛いことになったりする場合は、 OFF にできるようにカスタムコマンドを定義しておく。
 
-#+BEGIN_SRC emacs-lisp
-  (defun taiju/toggle-delete-trailing-whitespace-on-save ()
-    (interactive)
-    (cond ((member 'delete-trailing-whitespace before-save-hook)
-	   (remove-hook 'before-save-hook 'delete-trailing-whitespace)
-	   (message "delete-trailing-whitespace: OFF"))
-	  (t
-	   (add-hook 'before-save-hook 'delete-trailing-whitespace)
-	   (message "delete-trailing-whitespace: ON"))))
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (defun taiju/toggle-delete-trailing-whitespace-on-save ()
+      (interactive)
+      (cond ((member 'delete-trailing-whitespace before-save-hook)
+             (remove-hook 'before-save-hook 'delete-trailing-whitespace)
+             (message "delete-trailing-whitespace: OFF"))
+            (t
+             (add-hook 'before-save-hook 'delete-trailing-whitespace)
+             (message "delete-trailing-whitespace: ON"))))
+  #+END_SRC
 
 * プログラミング
 
-ここにはプログラミングに関する設定を書いていく。
+  ここにはプログラミングに関する設定を書いていく。
 
 ** プロジェクト管理
 
-プロジェクト管理には projectile を使う。
+   プロジェクト管理には projectile を使う。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'projectile)
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'projectile)
+     (projectile-mode +1)
+     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+   #+end_src
 
-プロジェクトにスイッチした時のアクションは ~projectile-vc~ にする。
+   プロジェクトにスイッチした時のアクションは ~projectile-vc~ にする。
 
-#+begin_src emacs-lisp
-  (setq projectile-switch-project-action #'projectile-vc)
-#+end_src
+   #+begin_src emacs-lisp
+     (setq projectile-switch-project-action #'projectile-vc)
+   #+end_src
 
 ** 補完
 
-コード等の補完は company-mode を使う。
+   コード等の補完は company-mode を使う。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'company)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'company)
+   #+END_SRC
 
-使えるタイミングでは常に使いたいので、 ~global-company-mode~ を有効する。
+   使えるタイミングでは常に使いたいので、 ~global-company-mode~ を有効する。
 
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook 'global-company-mode)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'after-init-hook 'global-company-mode)
+   #+END_SRC
 
-補完候補はすぐ出て欲しいので delay しない。最小文字数も1文字にする。
+   補完候補はすぐ出て欲しいので delay しない。最小文字数も1文字にする。
 
-#+begin_src emacs-lisp
-  (setq company-minimum-prefix-length 1
-	company-idle-delay 0.0)
-#+end_src
+   #+begin_src emacs-lisp
+     (setq company-minimum-prefix-length 1
+           company-idle-delay 0.0)
+   #+end_src
 
-シェルを使う時は反応が悪くてストレスな時があるのでオフにする。
+   シェルを使う時は反応が悪くてストレスな時があるのでオフにする。
 
-#+begin_src emacs-lisp
-  (defun taiju/deactivate-company ()
-    (company-mode -1))
+   #+begin_src emacs-lisp
+     (defun taiju/deactivate-company ()
+       (company-mode -1))
 
-  (add-hook 'shell-mode-hook #'taiju/deactivate-company)
-  (add-hook 'eshell-mode-hook #'taiju/deactivate-company)
-  (add-hook 'term-mode-hook #'taiju/deactivate-company)
-#+end_src
+     (add-hook 'shell-mode-hook #'taiju/deactivate-company)
+     (add-hook 'eshell-mode-hook #'taiju/deactivate-company)
+     (add-hook 'term-mode-hook #'taiju/deactivate-company)
+   #+end_src
 
 ** シンタックスチェック
 
-シンタックスチェックは flycheck を使う。
+   シンタックスチェックは flycheck を使う。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'flycheck)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'flycheck)
+   #+end_src
 
-flycheck の ON/OFF は別のモードで。
+   flycheck の ON/OFF は別のモードで。
 
 ** コードスニペット
 
-コードスニペットは yasnippet を使う。
+   コードスニペットは yasnippet を使う。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'yasnippet)
-  (taiju/package-install 'yasnippet-snippets)
-  (yas-global-mode 1)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'yasnippet)
+     (taiju/package-install 'yasnippet-snippets)
+     (yas-global-mode 1)
+   #+end_src
 
 ** company と yasnippet の連携
 
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c y") #'company-yasnippet)
-#+end_src
+   #+begin_src emacs-lisp
+     (global-set-key (kbd "C-c y") #'company-yasnippet)
+   #+end_src
 
 ** editorconfig
-EditorConfig が効くようにしておく。
+   EditorConfig が効くようにしておく。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'editorconfig)
-  (editorconfig-mode t)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'editorconfig)
+     (editorconfig-mode t)
+   #+end_src
 
 ** Treemacs
 
-Projectile や lsp-mode で Treemacs を使う。
+   Projectile や lsp-mode で Treemacs を使う。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'treemacs)
-  (taiju/package-install 'treemacs-projectile)
-  (taiju/package-install 'treemacs-magit)
-  (taiju/package-install 'treemacs-icons-dired)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'treemacs)
+     (taiju/package-install 'treemacs-projectile)
+     (taiju/package-install 'treemacs-magit)
+     (taiju/package-install 'treemacs-icons-dired)
+   #+end_src
 
-treemacs のウィンドウに切り替えるためのキーバインドを設定しておく。
+   treemacs のウィンドウに切り替えるためのキーバインドを設定しておく。
 
-#+begin_src emacs-lisp
-  (global-set-key (kbd "M-0") #'treemacs-select-window)
-#+end_src
+   #+begin_src emacs-lisp
+     (global-set-key (kbd "M-0") #'treemacs-select-window)
+   #+end_src
 
 ** dap-mode
 
@@ -371,46 +371,46 @@ treemacs のウィンドウに切り替えるためのキーバインドを設�
 
 ** LSP
 
-LSP ベースの各プログラミング開発環境を利用したいので、lsp-mode を入れる。
+   LSP ベースの各プログラミング開発環境を利用したいので、lsp-mode を入れる。
 
-#+begin_src emacs-lisp
-  (setq lsp-keymap-prefix "C-l")
-  (taiju/package-install 'lsp-mode)
-  (taiju/package-install 'lsp-ui)
-  (taiju/package-install 'lsp-treemacs)
-#+end_src
+   #+begin_src emacs-lisp
+     (setq lsp-keymap-prefix "C-l")
+     (taiju/package-install 'lsp-mode)
+     (taiju/package-install 'lsp-ui)
+     (taiju/package-install 'lsp-treemacs)
+   #+end_src
 
-lsp で which-key を使用する。
+   lsp で which-key を使用する。
 
-#+begin_src emacs-lisp
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-#+end_src
+   #+begin_src emacs-lisp
+     (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+   #+end_src
 
-ダーク系テーマに最適化されているっぽくて、一部デフォルト faces がライト系テーマでは明るくて見えないので調整する。
+   ダーク系テーマに最適化されているっぽくて、一部デフォルト faces がライト系テーマでは明るくて見えないので調整する。
 
-#+begin_src emacs-lisp
-  (require 'lsp-ui)
-  (set-face-attribute 'lsp-ui-sideline-code-action nil :foreground "dim gray")
-#+end_src
+   #+begin_src emacs-lisp
+     (require 'lsp-ui)
+     (set-face-attribute 'lsp-ui-sideline-code-action nil :foreground "dim gray")
+   #+end_src
 
-パフォーマンスに関係する項目の設定。（メインマシン用）
+   パフォーマンスに関係する項目の設定。（メインマシン用）
 
-参考: [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance - LSP Mode - LSP support for Emacs]]
+   参考: [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance - LSP Mode - LSP support for Emacs]]
 
-#+begin_src emacs-lisp
-  (cl-labels
-      ((mb (n) (* 1024 1024 n)))
-    (setq read-process-output-max (mb 1))
-    (setq gc-cons-threshold (mb 100)))
-#+end_src
+   #+begin_src emacs-lisp
+     (cl-labels
+         ((mb (n) (* 1024 1024 n)))
+       (setq read-process-output-max (mb 1))
+       (setq gc-cons-threshold (mb 100)))
+   #+end_src
 
 *** ESlint 統合機能の設定
 
-参考: [[https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration][LSP ESlint integration]]
+    参考: [[https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration][LSP ESlint integration]]
 
-#+begin_src emacs-lisp
-  (setq lsp-eslint-server-command `("node" ,(expand-file-name (car (last (file-expand-wildcards "~/.vscode-server/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
-#+end_src
+    #+begin_src emacs-lisp
+      (setq lsp-eslint-server-command `("node" ,(expand-file-name (car (last (file-expand-wildcards "~/.vscode-server/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
+    #+end_src
 
 ** Java
 
@@ -422,370 +422,370 @@ lsp で which-key を使用する。
      (defun taiju/java-mode-init ()
        (lsp)
        (setq c-basic-offset 4
-	     tab-width 4
-	     indent-tabs-mode nil))
+             tab-width 4
+             indent-tabs-mode nil))
 
      (add-hook 'java-mode-hook #'taiju/java-mode-init)
    #+end_src
 
 ** Lisp
 
-Emacs Lisp と Common Lisp の共通の設定。
+   Emacs Lisp と Common Lisp の共通の設定。
 
-Lisp を編集しやすいようにする。
+   Lisp を編集しやすいようにする。
 
-Paredit をインストールする。
+   Paredit をインストールする。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'paredit)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'paredit)
+   #+END_SRC
 
-Emacs Lisp と Common Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
+   Emacs Lisp と Common Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
 
-#+BEGIN_SRC emacs-lisp
-  (defun lisps-mode-hooks ()
-    (show-paren-mode t)
-    (enable-paredit-mode)
-    (eldoc-mode t))
-  (mapc (lambda (hook) (add-hook hook #'lisps-mode-hooks))
-	'(emacs-lisp-mode-hook
-	  ielm-mode-hook
-	  lisp-mode-hook
-	  lisp-interaction-mode-hook
-	  slime-repl-mode-hook
-	  eval-expression-minibuffer-setup-hook
-	  clojure-mode-hook
-	  cider-mode-hook
-	  cider-repl-mode-hook))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (defun lisps-mode-hooks ()
+       (show-paren-mode t)
+       (enable-paredit-mode)
+       (eldoc-mode t))
+     (mapc (lambda (hook) (add-hook hook #'lisps-mode-hooks))
+           '(emacs-lisp-mode-hook
+             ielm-mode-hook
+             lisp-mode-hook
+             lisp-interaction-mode-hook
+             slime-repl-mode-hook
+             eval-expression-minibuffer-setup-hook
+             clojure-mode-hook
+             cider-mode-hook
+             cider-repl-mode-hook))
+   #+END_SRC
 
 *** Common Lisp
 
-SLIME をインストールする。
+    SLIME をインストールする。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'slime)
-  (taiju/package-install 'slime-company)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'slime)
+      (taiju/package-install 'slime-company)
+    #+end_src
 
-その他、SLIME の設定をする。
+    その他、SLIME の設定をする。
 
-#+begin_src emacs-lisp
-  (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-company slime-fuzzy))
-  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-#+end_src
+    #+begin_src emacs-lisp
+      (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-company slime-fuzzy))
+      (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+    #+end_src
 
-処理系は SBCL を使う。
+    処理系は SBCL を使う。
 
-#+begin_src emacs-lisp
-  (setq inferior-lisp-program "sbcl")
-#+end_src
+    #+begin_src emacs-lisp
+      (setq inferior-lisp-program "sbcl")
+    #+end_src
 
 *** Clojure
 
-本当は Abcl 使いたいところだけど、今のところ Java の資産使うなら Clojure 使った方が良い。
+    本当は Abcl 使いたいところだけど、今のところ Java の資産使うなら Clojure 使った方が良い。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'cider)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'cider)
+    #+end_src
 
 ** Go
 
-Go の開発環境を整える。
+   Go の開発環境を整える。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'go-mode)
-  (defun taiju/go-mode-init ()
-    (require 'dap-go)
-    (lsp)
-    (flycheck-mode)
-    (setq tab-width 4
-          c-basic-offset 4)
-    (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    (add-hook 'before-save-hook #'lsp-organize-imports t t))
-  (add-hook 'go-mode-hook #'taiju/go-mode-init)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'go-mode)
+     (defun taiju/go-mode-init ()
+       (require 'dap-go)
+       (lsp)
+       (flycheck-mode)
+       (setq tab-width 4
+             c-basic-offset 4)
+       (add-hook 'before-save-hook #'lsp-format-buffer t t)
+       (add-hook 'before-save-hook #'lsp-organize-imports t t))
+     (add-hook 'go-mode-hook #'taiju/go-mode-init)
+   #+end_src
 
-Org モードでも使うので、ob-go も入れておく。
+   Org モードでも使うので、ob-go も入れておく。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'ob-go)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'ob-go)
+   #+end_src
 
 ** TypeScript
-TypeScript の開発環境。
+   TypeScript の開発環境。
 
-編集モードを入れる。
+   編集モードを入れる。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'typescript-mode)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'typescript-mode)
+   #+end_src
 
-LSPを使う。
+   LSPを使う。
 
-#+begin_src emacs-lisp
-  (add-hook 'typescript-mode-hook #'lsp)
-#+end_src
+   #+begin_src emacs-lisp
+     (add-hook 'typescript-mode-hook #'lsp)
+   #+end_src
 
-拡張子が ~.tsx~ の時は ~web-mode~ を使う。
+   拡張子が ~.tsx~ の時は ~web-mode~ を使う。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'web-mode)
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-  (add-hook 'web-mode-hook #'lsp)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'web-mode)
+     (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+     (add-hook 'web-mode-hook #'lsp)
+   #+end_src
 
 ** 汎用データフォーマット
 
-Emacs 標準で入っていない汎用データフォーマット用のパッケージを追加する。
+   Emacs 標準で入っていない汎用データフォーマット用のパッケージを追加する。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'json-mode)
-  (taiju/package-install 'yaml-mode)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'json-mode)
+     (taiju/package-install 'yaml-mode)
+   #+end_src
 
-JSONモードで幅の設定やらリンターの設定やらをする。
+   JSONモードで幅の設定やらリンターの設定やらをする。
 
-#+begin_src emacs-lisp
-  (defun taiju/json-mode-init ()
-    (setq-local js-indent-level 2)
-    (flycheck-mode))
+   #+begin_src emacs-lisp
+     (defun taiju/json-mode-init ()
+       (setq-local js-indent-level 2)
+       (flycheck-mode))
 
-  (add-hook 'json-mode-hook #'taiju/json-mode-init)
-#+end_src
+     (add-hook 'json-mode-hook #'taiju/json-mode-init)
+   #+end_src
 
 * 各種パッケージ
 
-ここからは各種パッケージの個別設定を書いていく。
+  ここからは各種パッケージの個別設定を書いていく。
 
 ** Ido
 
-コマンド補完等は Ido を全面的に採用する。自分はデフォルト厨なので標準で入っているのが良い。
+   コマンド補完等は Ido を全面的に採用する。自分はデフォルト厨なので標準で入っているのが良い。
 
-#+BEGIN_SRC emacs-lisp
-  (ido-mode t)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (ido-mode t)
+   #+END_SRC
 
-記憶力がないので、Flexible Matching を有効にする。
+   記憶力がないので、Flexible Matching を有効にする。
 
-#+BEGIN_SRC emacs-lisp
-  (setq ido-enable-flex-matching t)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq ido-enable-flex-matching t)
+   #+END_SRC
 
-補完候補が大文字か小文字かも区別したくない。
+   補完候補が大文字か小文字かも区別したくない。
 
-#+BEGIN_SRC emacs-lisp
-  (setq ido-case-fold t)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq ido-case-fold t)
+   #+END_SRC
 
-なるべくいろんなところで使えるようにする。
+   なるべくいろんなところで使えるようにする。
 
-#+BEGIN_SRC emacs-lisp
-  (ido-everywhere t)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (ido-everywhere t)
+   #+END_SRC
 
 *** ido-completing-read+
 
-ido-every-where でも補完対象が足りない。
+    ido-every-where でも補完対象が足りない。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'ido-completing-read+)
-  (ido-ubiquitous-mode t)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (taiju/package-install 'ido-completing-read+)
+      (ido-ubiquitous-mode t)
+    #+END_SRC
 
 *** smex
 
-~M-x~ でも Ido が使えるように ~smex~ を入れて、初期化しておく。
+    ~M-x~ でも Ido が使えるように ~smex~ を入れて、初期化しておく。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'smex)
-  (smex-initialize)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (taiju/package-install 'smex)
+      (smex-initialize)
+    #+END_SRC
 
-キーバインドは[[https://github.com/nonsequitur/smex/blob/master/README.markdown][公式ドキュメント]]そのままの設定にする。
+    キーバインドは[[https://github.com/nonsequitur/smex/blob/master/README.markdown][公式ドキュメント]]そのままの設定にする。
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-x") #'smex)
-  (global-set-key (kbd "M-X") #'smex-major-mode-commands)
-  (global-set-key (kbd "C-c C-c M-x") #'execute-extended-command)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "M-x") #'smex)
+      (global-set-key (kbd "M-X") #'smex-major-mode-commands)
+      (global-set-key (kbd "C-c C-c M-x") #'execute-extended-command)
+    #+END_SRC
 
 *** ido-vertical
 
-やはり補完候補は縦並びがしっくりくる。
+    やはり補完候補は縦並びがしっくりくる。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'ido-vertical-mode)
-  (ido-vertical-mode 1)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (taiju/package-install 'ido-vertical-mode)
+      (ido-vertical-mode 1)
+    #+END_SRC
 
-補完候補の選択は使い慣れた ~C-n~, ~C-p~ にする。[fn:ido-vertical]
+    補完候補の選択は使い慣れた ~C-n~, ~C-p~ にする。[fn:ido-vertical]
 
-#+BEGIN_SRC emacs-lisp
-  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+    #+END_SRC
 
 *** flx-ido
 
-flx-ido を入れて、常にあいまい検索できるようにする。
+    flx-ido を入れて、常にあいまい検索できるようにする。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'flx-ido)
-  (flx-ido-mode 1)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'flx-ido)
+      (flx-ido-mode 1)
+    #+end_src
 
-~flx-ido-use-faces~ が有効になるように標準のはオフる。
+    ~flx-ido-use-faces~ が有効になるように標準のはオフる。
 
-#+begin_src emacs-lisp
-  (setq ido-use-faces nil)
-#+end_src
+    #+begin_src emacs-lisp
+      (setq ido-use-faces nil)
+    #+end_src
 
 *** ido-at-point
 
-completion-at-point でも Ido を使えるようにするため、ido-at-point を追加インストールする。
+    completion-at-point でも Ido を使えるようにするため、ido-at-point を追加インストールする。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'ido-at-point)
-  (ido-at-point-mode)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'ido-at-point)
+      (ido-at-point-mode)
+    #+end_src
 
 ** Magit
 
-最高の Git クライアント。
+   最高の Git クライアント。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'magit)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'magit)
+   #+END_SRC
 
-Ido を有効にする。
+   Ido を有効にする。
 
-#+BEGIN_SRC emacs-lisp
-  (setq magit-completing-read-function 'magit-ido-completing-read)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq magit-completing-read-function 'magit-ido-completing-read)
+   #+END_SRC
 
 ** Org
 
 *** 全般
 
-最新版をインストールする。
+    最新版をインストールする。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'org-plus-contrib)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'org-plus-contrib)
+    #+end_src
 
-タスクを閉じる時に閉じた時間を記録するようにする。
+    タスクを閉じる時に閉じた時間を記録するようにする。
 
-#+begin_src emacs-lisp
-  (setq org-log-done 'time)
-#+end_src
+    #+begin_src emacs-lisp
+      (setq org-log-done 'time)
+    #+end_src
 
-org-todo-keywords を設定する。
+    org-todo-keywords を設定する。
 
-#+begin_src emacs-lisp
-  (setq org-todo-keywords
-	'((sequence "TODO(t)" "DOING(i!)" "WAIT(w@/!)" "|" "DONE(d@)" "CANCELED(c@)")))
-#+end_src
+    #+begin_src emacs-lisp
+      (setq org-todo-keywords
+            '((sequence "TODO(t)" "DOING(i!)" "WAIT(w@/!)" "|" "DONE(d@)" "CANCELED(c@)")))
+    #+end_src
 
 *** org-capture/org-refile
 
-キーバインドは標準的なやつ。
+    キーバインドは標準的なやつ。
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c c") #'org-capture)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "C-c c") #'org-capture)
+    #+END_SRC
 
-テンプレートは下記。
+    テンプレートは下記。
 
-#+BEGIN_SRC emacs-lisp
-  (setq org-capture-templates
-        `(("t" "TODO" entry (file ,(expand-file-name "inbox.org" org-directory))
-           "* TODO %?")
-          ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
-           "* %?%<%H:%M>")))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (setq org-capture-templates
+            `(("t" "TODO" entry (file ,(expand-file-name "inbox.org" org-directory))
+               "* TODO %?")
+              ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
+               "* %?%<%H:%M>")))
+    #+END_SRC
 
-上記で追加したタスクなどは project.org に整理できるようにする。
+    上記で追加したタスクなどは project.org に整理できるようにする。
 
-#+begin_src emacs-lisp
-  (setq org-refile-targets
-        `((,(string-join (list org-directory "project.org") "/") :maxlevel . 3)))
-#+end_src
+    #+begin_src emacs-lisp
+      (setq org-refile-targets
+            `((,(string-join (list org-directory "project.org") "/") :maxlevel . 3)))
+    #+end_src
 
 *** org-agenda
 
-キーバインドは標準的なやつ。
+    キーバインドは標準的なやつ。
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c a") #'org-agenda)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "C-c a") #'org-agenda)
+    #+END_SRC
 
-~org-directory~ を ~org-agenda-files~ に設定する。
+    ~org-directory~ を ~org-agenda-files~ に設定する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq org-agenda-files (list org-directory))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-files (list org-directory))
+    #+END_SRC
 
-祝日を表示する。
+    祝日を表示する。
 
-#+begin_src emacs-lisp
-  (setq org-agenda-include-diary t)
-#+end_src
+    #+begin_src emacs-lisp
+      (setq org-agenda-include-diary t)
+    #+end_src
 
 *** org-babel
 
-いろいろ org-babel で実行できるようにしておく。
+    いろいろ org-babel で実行できるようにしておく。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'ob-http)
-  (taiju/package-install 'ob-deno)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'ob-http)
+      (taiju/package-install 'ob-deno)
+    #+end_src
 
-#+BEGIN_SRC emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (dot . t)
-     (sql . t)
-     (shell . t)
-     (perl . t)
-     (go . t)
-     (http . t)
-     (deno . t)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((emacs-lisp . t)
+         (dot . t)
+         (sql . t)
+         (shell . t)
+         (perl . t)
+         (go . t)
+         (http . t)
+         (deno . t)))
+    #+END_SRC
 
-ob-deno のソースは typescript-mode で表示・編集できるようにする。
+    ob-deno のソースは typescript-mode で表示・編集できるようにする。
 
-#+begin_src emacs-lisp
-  (add-to-list 'org-src-lang-modes '("deno" . typescript))
-#+end_src
+    #+begin_src emacs-lisp
+      (add-to-list 'org-src-lang-modes '("deno" . typescript))
+    #+end_src
 
 ** undo-tree
 
-標準の undo / redo がうまく使いこなせないので、undo-tree を入れる。
+   標準の undo / redo がうまく使いこなせないので、undo-tree を入れる。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'undo-tree)
-  (global-undo-tree-mode 1)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'undo-tree)
+     (global-undo-tree-mode 1)
+   #+END_SRC
 
 ** Twitter
 
-Twitter クライアントは Emacs で事足りる。
+   Twitter クライアントは Emacs で事足りる。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'twittering-mode)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'twittering-mode)
+   #+END_SRC
 
-マスターパスワードを使って、トークンを保存する。
+   マスターパスワードを使って、トークンを保存する。
 
-#+BEGIN_SRC emacs-lisp
-  (setq twittering-use-master-password t)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq twittering-use-master-password t)
+   #+END_SRC
 
-GPG の比較的新しいバージョンを使っている場合は、上記のマスターパスワードの入力ができずエラーになり、起動のたび PIN の入力が必要になる。
+   GPG の比較的新しいバージョンを使っている場合は、上記のマスターパスワードの入力ができずエラーになり、起動のたび PIN の入力が必要になる。
 
-下記の記事を参考に、パスフレーズの入力を標準入力から入力できるようにしておく必要がある。
-https://blog.web-apps.tech/emacs-mac-twittering-mode-every-asked-pin/
+   下記の記事を参考に、パスフレーズの入力を標準入力から入力できるようにしておく必要がある。
+   https://blog.web-apps.tech/emacs-mac-twittering-mode-every-asked-pin/
 
 *** `~/.gnupg/gpg-agent.conf`
 
@@ -799,97 +799,97 @@ https://blog.web-apps.tech/emacs-mac-twittering-mode-every-asked-pin/
       pinentry-mode loopback
     #+end_example
 
-※ 上記の設定によって、gpg の他の機能が使えなくなる可能性があるらしいので、問題が生じたらやめる。
+    ※ 上記の設定によって、gpg の他の機能が使えなくなる可能性があるらしいので、問題が生じたらやめる。
 
 ** which-key
 
-うる覚えのキーバインドは which-key があると助かる時がある。
+   うる覚えのキーバインドは which-key があると助かる時がある。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'which-key)
-  (which-key-mode)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'which-key)
+     (which-key-mode)
+   #+END_SRC
 
 ** dired
 
-dired-subtree を入れて、dired をツリーで操作できるようにする。
+   dired-subtree を入れて、dired をツリーで操作できるようにする。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'dired-subtree)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'dired-subtree)
+   #+END_SRC
 
-ツリーの開閉を直感的なキーバインドで操作できるようにする。
+   ツリーの開閉を直感的なキーバインドで操作できるようにする。
 
-#+BEGIN_SRC emacs-lisp
-  (require 'dired)
-  (define-key dired-mode-map (kbd "<right>") 'dired-subtree-insert)
-  (define-key dired-mode-map (kbd "<left>") 'dired-subtree-remove)
-  (define-key dired-mode-map (kbd "f") 'dired-subtree-insert)
-  (define-key dired-mode-map (kbd "b") 'dired-subtree-remove)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (require 'dired)
+     (define-key dired-mode-map (kbd "<right>") 'dired-subtree-insert)
+     (define-key dired-mode-map (kbd "<left>") 'dired-subtree-remove)
+     (define-key dired-mode-map (kbd "f") 'dired-subtree-insert)
+     (define-key dired-mode-map (kbd "b") 'dired-subtree-remove)
+   #+END_SRC
 
-デフォルトだとサブツリーのバックグラウンドカラーがどぎつくて見にくすぎるので、色が変わる必要性もないし OFF る。
+   デフォルトだとサブツリーのバックグラウンドカラーがどぎつくて見にくすぎるので、色が変わる必要性もないし OFF る。
 
-#+BEGIN_SRC emacs-lisp
-  (setq dired-subtree-use-backgrounds nil)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq dired-subtree-use-backgrounds nil)
+   #+END_SRC
 
 ** emojify
 
-org-mode とかで絵文字使いたい時があるので emojify を入れておく。
+   org-mode とかで絵文字使いたい時があるので emojify を入れておく。
 
-#+BEGIN_SRC emacs-lisp
-  (taiju/package-install 'emojify)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (taiju/package-install 'emojify)
+   #+END_SRC
 
-org-mode で有効化しておく。
+   org-mode で有効化しておく。
 
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook #'emojify-mode)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook #'emojify-mode)
+   #+END_SRC
 
-絵文字のテスト:ok_hand:
+   絵文字のテスト:ok_hand:
 
 ** ace-window
 
-CUI バージョンを使っている時などに辛いのでウィンドウ切り替えの効率化のために ace-window を使用する。
+   CUI バージョンを使っている時などに辛いのでウィンドウ切り替えの効率化のために ace-window を使用する。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'ace-window)
-  (global-set-key (kbd "M-o") #'ace-window)
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'ace-window)
+     (global-set-key (kbd "M-o") #'ace-window)
+     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+   #+end_src
 
 ** ox-*
 
 *** ox-gfm
 
-Org モードから Github Flavored Markdown をエクスポートできるようにする。
+    Org モードから Github Flavored Markdown をエクスポートできるようにする。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'ox-gfm)
-#+end_src
+    #+begin_src emacs-lisp
+      (taiju/package-install 'ox-gfm)
+    #+end_src
 
 ** multiple-cursors
 
-マルチカーソルな作業ができる ~multiple-cursors~ を使用する。キーバインドは公式ドキュメントのまま。
+   マルチカーソルな作業ができる ~multiple-cursors~ を使用する。キーバインドは公式ドキュメントのまま。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'multiple-cursors)
-  (global-set-key (kbd "C-S-c C-S-c") #'mc/edit-lines)
-  (global-set-key (kbd "C->") #'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") #'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") #'mc/mark-all-like-this)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'multiple-cursors)
+     (global-set-key (kbd "C-S-c C-S-c") #'mc/edit-lines)
+     (global-set-key (kbd "C->") #'mc/mark-next-like-this)
+     (global-set-key (kbd "C-<") #'mc/mark-previous-like-this)
+     (global-set-key (kbd "C-c C-<") #'mc/mark-all-like-this)
+   #+end_src
 
 ** Swiper
 
-I-search を Swiper に置き換える。
+   I-search を Swiper に置き換える。
 
-#+begin_src emacs-lisp
-  (taiju/package-install 'swiper)
-  (global-set-key (kbd "\C-s") #'swiper)
-#+end_src
+   #+begin_src emacs-lisp
+     (taiju/package-install 'swiper)
+     (global-set-key (kbd "\C-s") #'swiper)
+   #+end_src
 
 ** Docker
    Docker のクライアントを使う。
@@ -939,7 +939,7 @@ I-search を Swiper に置き換える。
      (with-eval-after-load "holidays"
        (require 'japanese-holidays)
        (setq calendar-holidays
-                (append japanese-holidays holiday-local-holidays holiday-other-holidays)))
+             (append japanese-holidays holiday-local-holidays holiday-other-holidays)))
    #+end_src
 
 ** graphql-mode
