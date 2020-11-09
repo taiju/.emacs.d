@@ -4,6 +4,14 @@ Emacs の設定。
 
 Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))~ で読み込まれることで設定ファイルになる。
 
+* コンパイルオプション
+
+  下記のコンパイルオプション付きで Emacs をソースインストールする。
+
+  #+begin_example
+    ./configure --with-modules --with-json --with-xwidgets --with-imagemagick --with-mailutils
+  #+end_example
+
 * パッケージ設定
 
 何はなくともパッケージ。
@@ -936,7 +944,21 @@ I-search を Swiper に置き換える。
      (taiju/package-install 'graphql-mode)
    #+end_src
 
-   #+RESULTS:
+** vterm
+
+   vterm をインストールする。Emacs を ~--with-modules~ オプション付きでコンパイルしておく必要がある。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'vterm)
+   #+end_src
+
+   Debian (strech) でインストールする libvterm-dev は、vterm パッケージで想定しているものよりも古いらしく、下記のコンパイルオプションを有効にする必要がある。
+
+   #+begin_src emacs-lisp
+     (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no")
+   #+end_src
+
+   SEE: https://github.com/akermu/emacs-libvterm/issues/323
 
 * Footnotes
 
