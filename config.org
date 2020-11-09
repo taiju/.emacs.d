@@ -18,29 +18,29 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
   melpa, org のパッケージアーカイブ URL を指定する。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq package-archives
           '(("gnu" . "https://elpa.gnu.org/packages/")
             ("melpa" . "https://melpa.org/packages/")
             ("org" . "https://orgmode.org/elpa/")))
-  #+END_SRC
+  #+end_src
 
   パッケージを初期化する。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
     (package-initialize)
-  #+END_SRC
+  #+end_src
 
   パッケージが未インストールの場合は起動時にインストールされるようにしたいので、そんな感じのカスタム関数を定義しておく。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (defun taiju/package-install (pkg)
       (unless (package-installed-p pkg)
         (unless package-archive-contents
           (package-refresh-contents))
         (package-install pkg)))
-  #+END_SRC
+  #+end_src
 
 * カスタムファイルの場所
 
@@ -54,61 +54,61 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
   スタートアップ画面は出さない。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq inhibit-startup-message t)
-  #+END_SRC
+  #+end_src
 
   起動直後からフルスクリーン化する。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (toggle-frame-fullscreen)
-  #+END_SRC
+  #+end_src
 
 * 見た目の設定
 
   ツールバーも、メニューバーも、スクロールバーもいらない。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (tool-bar-mode -1)
     (menu-bar-mode -1)
     (scroll-bar-mode -1)
-  #+END_SRC
+  #+end_src
 
   フルスクリーンだと時間とかバッテリー残量とかが見えなくて困るので、モードラインに表示する。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq display-time-format "%m-%d %H:%M")
     (display-time)
     (display-battery-mode t)
-  #+END_SRC
+  #+end_src
 
 ** テーマ
 
    標準で入っている leuven を使う。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (load-theme 'leuven t)
-   #+END_SRC
+   #+end_src
 
 * 挙動の調整
 
   スクロール時に画面が動きすぎる問題を解消する。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq scroll-conservatively 100)
-  #+END_SRC
+  #+end_src
 
   質問の重要度に関わらずは y or n で答えたい。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (fset 'yes-or-no-p 'y-or-n-p)
-  #+END_SRC
+  #+end_src
 
   つい癖で全角半角キーで日本語入力を切り替えてしまうので、全角半角キーにも ~toggle-input-method~ を割り当てておく。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (global-set-key (kbd "<zenkaku-hankaku>") #'toggle-input-method)
-  #+END_SRC
+  #+end_src
 
   バッファ一覧はフィルタとか使いたい時があるので ibuffer を使うようにする。
 
@@ -182,32 +182,32 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    言語環境を日本語にする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (set-language-environment "Japanese")
-   #+END_SRC
+   #+end_src
 
 ** 文字コード
 
    文字コードは UTF-8 を優先。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (prefer-coding-system 'utf-8)
-   #+END_SRC
+   #+end_src
 
 ** 日本語入力
 
    日本語入力は mozc 一択。[fn:mozc]
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'mozc)
      (setq default-input-method "japanese-mozc")
-   #+END_SRC
+   #+end_src
 
    デフォルトのスタイルはちょっとうるさいので、スタイルを変更する。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (setq mozc-candidate-style 'echo-area)
-   #+END_SRC
+   #+end_src
 
 * フォント
 
@@ -223,31 +223,31 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
   自動保存しない。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq auto-save-default nil)
-  #+END_SRC
+  #+end_src
 
   バックアップも作らない。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq make-backup-files nil)
-  #+END_SRC
+  #+end_src
 
   POSIX のファイルの定義に則り、最終行に改行を入れる。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq require-final-newline t)
-  #+END_SRC
+  #+end_src
 
   保存時に余計なホワイトスペースを削除するようにする。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (add-hook 'before-save-hook #'delete-trailing-whitespace)
-  #+END_SRC
+  #+end_src
 
   基本はこれで良いんだけど、Git 管理下のファイル等で diff が出過ぎて辛いことになったりする場合は、 OFF にできるようにカスタムコマンドを定義しておく。
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (defun taiju/toggle-delete-trailing-whitespace-on-save ()
       (interactive)
       (cond ((member 'delete-trailing-whitespace before-save-hook)
@@ -256,7 +256,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
             (t
              (add-hook 'before-save-hook 'delete-trailing-whitespace)
              (message "delete-trailing-whitespace: ON"))))
-  #+END_SRC
+  #+end_src
 
 * プログラミング
 
@@ -282,15 +282,15 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    コード等の補完は company-mode を使う。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'company)
-   #+END_SRC
+   #+end_src
 
    使えるタイミングでは常に使いたいので、 ~global-company-mode~ を有効する。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (add-hook 'after-init-hook 'global-company-mode)
-   #+END_SRC
+   #+end_src
 
    補完候補はすぐ出て欲しいので delay しない。最小文字数も1文字にする。
 
@@ -337,6 +337,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
    #+end_src
 
 ** editorconfig
+
    EditorConfig が効くようにしておく。
 
    #+begin_src emacs-lisp
@@ -436,13 +437,13 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    Paredit をインストールする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'paredit)
-   #+END_SRC
+   #+end_src
 
    Emacs Lisp と Common Lisp で show-paren-mode と paredit-mode と eldoc-mode を有効にする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (defun lisps-mode-hooks ()
        (show-paren-mode t)
        (enable-paredit-mode)
@@ -457,7 +458,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
              clojure-mode-hook
              cider-mode-hook
              cider-repl-mode-hook))
-   #+END_SRC
+   #+end_src
 
 *** Common Lisp
 
@@ -513,6 +514,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
    #+end_src
 
 ** TypeScript
+
    TypeScript の開発環境。
 
    編集モードを入れる。
@@ -562,68 +564,68 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    コマンド補完等は Ido を全面的に採用する。自分はデフォルト厨なので標準で入っているのが良い。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (ido-mode t)
-   #+END_SRC
+   #+end_src
 
    記憶力がないので、Flexible Matching を有効にする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (setq ido-enable-flex-matching t)
-   #+END_SRC
+   #+end_src
 
    補完候補が大文字か小文字かも区別したくない。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (setq ido-case-fold t)
-   #+END_SRC
+   #+end_src
 
    なるべくいろんなところで使えるようにする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (ido-everywhere t)
-   #+END_SRC
+   #+end_src
 
 *** ido-completing-read+
 
     ido-every-where でも補完対象が足りない。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (taiju/package-install 'ido-completing-read+)
       (ido-ubiquitous-mode t)
-    #+END_SRC
+    #+end_src
 
 *** smex
 
     ~M-x~ でも Ido が使えるように ~smex~ を入れて、初期化しておく。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (taiju/package-install 'smex)
       (smex-initialize)
-    #+END_SRC
+    #+end_src
 
     キーバインドは[[https://github.com/nonsequitur/smex/blob/master/README.markdown][公式ドキュメント]]そのままの設定にする。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (global-set-key (kbd "M-x") #'smex)
       (global-set-key (kbd "M-X") #'smex-major-mode-commands)
       (global-set-key (kbd "C-c C-c M-x") #'execute-extended-command)
-    #+END_SRC
+    #+end_src
 
 *** ido-vertical
 
     やはり補完候補は縦並びがしっくりくる。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (taiju/package-install 'ido-vertical-mode)
       (ido-vertical-mode 1)
-    #+END_SRC
+    #+end_src
 
     補完候補の選択は使い慣れた ~C-n~, ~C-p~ にする。[fn:ido-vertical]
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-    #+END_SRC
+    #+end_src
 
 *** flx-ido
 
@@ -653,15 +655,15 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    最高の Git クライアント。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'magit)
-   #+END_SRC
+   #+end_src
 
    Ido を有効にする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (setq magit-completing-read-function 'magit-ido-completing-read)
-   #+END_SRC
+   #+end_src
 
 ** Org
 
@@ -690,19 +692,19 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
     キーバインドは標準的なやつ。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (global-set-key (kbd "C-c c") #'org-capture)
-    #+END_SRC
+    #+end_src
 
     テンプレートは下記。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq org-capture-templates
             `(("t" "TODO" entry (file ,(expand-file-name "inbox.org" org-directory))
                "* TODO %?")
               ("n" "Notes" entry (file+olp+datetree ,(expand-file-name "notes.org" org-directory))
                "* %?%<%H:%M>")))
-    #+END_SRC
+    #+end_src
 
     上記で追加したタスクなどは project.org に整理できるようにする。
 
@@ -715,15 +717,15 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
     キーバインドは標準的なやつ。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (global-set-key (kbd "C-c a") #'org-agenda)
-    #+END_SRC
+    #+end_src
 
     ~org-directory~ を ~org-agenda-files~ に設定する。
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq org-agenda-files (list org-directory))
-    #+END_SRC
+    #+end_src
 
     祝日を表示する。
 
@@ -740,7 +742,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
       (taiju/package-install 'ob-deno)
     #+end_src
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (org-babel-do-load-languages
        'org-babel-load-languages
        '((emacs-lisp . t)
@@ -751,7 +753,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
          (go . t)
          (http . t)
          (deno . t)))
-    #+END_SRC
+    #+end_src
 
     ob-deno のソースは typescript-mode で表示・編集できるようにする。
 
@@ -763,24 +765,24 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    標準の undo / redo がうまく使いこなせないので、undo-tree を入れる。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'undo-tree)
      (global-undo-tree-mode 1)
-   #+END_SRC
+   #+end_src
 
 ** Twitter
 
    Twitter クライアントは Emacs で事足りる。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'twittering-mode)
-   #+END_SRC
+   #+end_src
 
    マスターパスワードを使って、トークンを保存する。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (setq twittering-use-master-password t)
-   #+END_SRC
+   #+end_src
 
    GPG の比較的新しいバージョンを使っている場合は、上記のマスターパスワードの入力ができずエラーになり、起動のたび PIN の入力が必要になる。
 
@@ -805,48 +807,48 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    うる覚えのキーバインドは which-key があると助かる時がある。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'which-key)
      (which-key-mode)
-   #+END_SRC
+   #+end_src
 
 ** dired
 
    dired-subtree を入れて、dired をツリーで操作できるようにする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'dired-subtree)
-   #+END_SRC
+   #+end_src
 
    ツリーの開閉を直感的なキーバインドで操作できるようにする。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (require 'dired)
      (define-key dired-mode-map (kbd "<right>") 'dired-subtree-insert)
      (define-key dired-mode-map (kbd "<left>") 'dired-subtree-remove)
      (define-key dired-mode-map (kbd "f") 'dired-subtree-insert)
      (define-key dired-mode-map (kbd "b") 'dired-subtree-remove)
-   #+END_SRC
+   #+end_src
 
    デフォルトだとサブツリーのバックグラウンドカラーがどぎつくて見にくすぎるので、色が変わる必要性もないし OFF る。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (setq dired-subtree-use-backgrounds nil)
-   #+END_SRC
+   #+end_src
 
 ** emojify
 
    org-mode とかで絵文字使いたい時があるので emojify を入れておく。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (taiju/package-install 'emojify)
-   #+END_SRC
+   #+end_src
 
    org-mode で有効化しておく。
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (add-hook 'org-mode-hook #'emojify-mode)
-   #+END_SRC
+   #+end_src
 
    絵文字のテスト:ok_hand:
 
@@ -892,6 +894,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
    #+end_src
 
 ** Docker
+
    Docker のクライアントを使う。
 
    #+begin_src emacs-lisp
@@ -902,6 +905,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
    ~docker~ パッケージの依存関係に ~docker-tramp~ パッケージが含まれているので、TRAMP を使ってコンテナ内のファイルを編集できる。(~/docker:<image-id>/path/to/file~)
 
 ** sudo-edit
+
    sudo しないと編集できないファイルを sudo せずに開いた時に、少ない手順で sudo して開き直せるようにする。
 
    #+begin_src emacs-lisp
