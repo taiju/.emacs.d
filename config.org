@@ -784,24 +784,118 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (setq twittering-use-master-password t)
    #+end_src
 
-   GPG の比較的新しいバージョンを使っている場合は、上記のマスターパスワードの入力ができずエラーになり、起動のたび PIN の入力が必要になる。
+*** マスターパスワード入力できない問題の対処
 
-   下記の記事を参考に、パスフレーズの入力を標準入力から入力できるようにしておく必要がある。
-   https://blog.web-apps.tech/emacs-mac-twittering-mode-every-asked-pin/
+    GPG の比較的新しいバージョンを使っている場合は、上記のマスターパスワードの入力ができずエラーになり、起動のたび PIN の入力が必要になる。
 
-*** `~/.gnupg/gpg-agent.conf`
+    下記の記事を参考に、パスフレーズの入力を標準入力から入力できるようにしておく必要がある。
+    https://blog.web-apps.tech/emacs-mac-twittering-mode-every-asked-pin/
 
-    #+begin_example
-      allow-loopback-pinentry
-    #+end_example
+**** `~/.gnupg/gpg-agent.conf`
 
-*** `~/.gnupg/gpg.conf`
+     #+begin_example
+       allow-loopback-pinentry
+     #+end_example
 
-    #+begin_example
-      pinentry-mode loopback
-    #+end_example
+**** `~/.gnupg/gpg.conf`
 
-    ※ 上記の設定によって、gpg の他の機能が使えなくなる可能性があるらしいので、問題が生じたらやめる。
+     #+begin_example
+       pinentry-mode loopback
+     #+end_example
+
+     ※ 上記の設定によって、gpg の他の機能が使えなくなる可能性があるらしいので、問題が生じたらやめる。
+
+*** 暗号化されたファイルのデコードができない問題の対処
+
+    Emacs のバージョンが新しい場合、twittering-mode のアカウント情報の複合化処理にて、すでに廃止された ~epa--decode-coding-string~ という関数を使っている箇所があり、 ~decode-coding-string~ を代わりに使うようにする必要がある。
+
+    SEE: https://github.com/hayamiz/twittering-mode/issues/154
+
+    twittering-mode のバージョンが ~20181121.1402~ で、かつ、Emacs のバージョンが 27 以上の場合は、アドバイスを使って強引に後述で定義する関数にまるっと差し替える。
+
+    #+begin_src emacs-lisp :noweb yes
+      (when (and (equal (pkg-info-package-version 'twittering-mode) '(20181121 1402))
+                 (>= emacs-major-version 27))
+        <<taiju/twittering-read-from-encrypted-file>>
+        (advice-add 'twittering-read-from-encrypted-file :around #'taiju/twittering-read-from-encrypted-file))
+    #+end_src
+
+    差し替える関数は下記。 ~epa--decode-coding-string~ を ~decode-coding-string~ に変更しているだけ。
+
+    #+begin_src emacs-lisp :noweb-ref taiju/twittering-read-from-encrypted-file
+      (defun taiju/twittering-read-from-encrypted-file (_ file)
+        "Decrypt contents from FILE and return them.
+      Read encrypted contents from FILE and return the decrypted contents.
+      This function requires `epa' or `alpaca' library."
+        (cond
+         ((not (file-readable-p file))
+          (error "Failed to read %s" file)
+          nil)
+         ((require 'epa nil t)
+          (let ((context (epg-make-context epa-protocol))
+                ;; Bind `default-directory' to the temporary directory
+                ;; because it is possible that the directory pointed by
+                ;; `default-directory' has been already removed.
+                (default-directory temporary-file-directory)
+                (decrypted-result nil))
+            (epg-context-set-passphrase-callback
+             context #'epa-passphrase-callback-function)
+            (epg-context-set-progress-callback
+             context
+             (cons #'epa-progress-callback-function
+                   (format "Decrypting %s..." (file-name-nondirectory file))))
+            (when (fboundp 'epg-context-pinentry-mode)
+              (setf (epg-context-pinentry-mode context) epa-pinentry-mode))
+            (message "Decrypting %s..." (file-name-nondirectory file))
+            (condition-case err
+                (let ((full-path (expand-file-name file)))
+                  ;; `epg-decrypt-file' included in EasyPG 1.0.0, which is
+                  ;; distributed with Emacs 23.2, requires the expanded full path
+                  ;; as the argument CIPHER. This is because CIPHER is directly
+                  ;; used as an argument of the command `gpg'.
+                  (setq decrypted-result (epg-decrypt-file context full-path nil)))
+              (error
+               (if (fboundp 'epa-display-error)
+                   (epa-display-error context)
+                 (message "%s" (cdr err)))
+               nil))
+            (when decrypted-result
+              (setq decrypted-result
+                    (decode-coding-string ; << PATCH
+                     decrypted-result
+                     (or coding-system-for-read 'undecided))))
+            (if (epg-context-result-for context 'verify)
+                (epa-display-info (epg-verify-result-to-string
+                                   (epg-context-result-for context 'verify))))
+            decrypted-result))
+         ((require 'alpaca nil t)
+          (with-temp-buffer
+            (let ((buffer-file-name (expand-file-name file))
+                  (alpaca-regex-suffix ".*")
+                  (coding-system-for-read 'binary)
+                  (coding-system-for-write 'binary)
+                  (temp-buffer (current-buffer))
+                  ;; Bind `default-directory' to the temporary directory
+                  ;; because it is possible that the directory pointed by
+                  ;; `default-directory' has been already removed.
+                  (default-directory temporary-file-directory))
+              (insert-file-contents-literally file)
+              (set-buffer-modified-p nil)
+              (condition-case nil
+                  (progn
+                    (alpaca-after-find-file)
+                    (if (eq temp-buffer (current-buffer))
+                        (buffer-string)
+                      ;; `alpaca-after-find-file' kills the current buffer
+                      ;; if the decryption is failed.
+                      nil))
+                (error
+                 (when (eq temp-buffer (current-buffer))
+                   (delete-region (point-min) (point-max)))
+                 nil)))))
+         (t
+          nil)))
+    #+end_src
 
 ** which-key
 
