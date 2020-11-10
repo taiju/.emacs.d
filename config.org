@@ -6,7 +6,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
 * コンパイルオプション
 
-  下記のコンパイルオプション付きで Emacs をソースインストールする。
+  下記のコンパイルオプション付きで Emacs をソースインストールする。メインで使用している Emacs のバージョンは 27.1。
 
   #+begin_example
     ./configure --with-modules --with-json --with-xwidgets --with-imagemagick --with-mailutils
