@@ -811,18 +811,11 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
     SEE: https://github.com/hayamiz/twittering-mode/issues/154
 
-    twittering-mode のバージョンが ~20181121.1402~ で、かつ、Emacs のバージョンが 27 以上の場合は、アドバイスを使って強引に後述で定義する関数にまるっと差し替える。
-
-    #+begin_src emacs-lisp :noweb yes
-      (when (and (equal (pkg-info-package-version 'twittering-mode) '(20181121 1402))
-                 (>= emacs-major-version 27))
-        <<taiju/twittering-read-from-encrypted-file>>
-        (advice-add 'twittering-read-from-encrypted-file :around #'taiju/twittering-read-from-encrypted-file))
-    #+end_src
+    twittering-mode のバージョンが ~20181121.1402~ で、かつ、Emacs のバージョンが 27 以上の場合は、アドバイスを使って強引に後述で定義する関数にまるっと差し替えるようにする。
 
     差し替える関数は下記。 ~epa--decode-coding-string~ を ~decode-coding-string~ に変更しているだけ。
 
-    #+begin_src emacs-lisp :noweb-ref taiju/twittering-read-from-encrypted-file
+    #+begin_src emacs-lisp
       (defun taiju/twittering-read-from-encrypted-file (_ file)
         "Decrypt contents from FILE and return them.
       Read encrypted contents from FILE and return the decrypted contents.
@@ -895,6 +888,14 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
                  nil)))))
          (t
           nil)))
+    #+end_src
+
+    advice でまるっと差し替える。
+
+    #+begin_src emacs-lisp :noweb yes
+      (when (and (equal (pkg-info-package-version 'twittering-mode) '(20181121 1402))
+                 (>= emacs-major-version 27))
+        (advice-add 'twittering-read-from-encrypted-file :around #'taiju/twittering-read-from-encrypted-file))
     #+end_src
 
 ** which-key
