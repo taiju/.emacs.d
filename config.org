@@ -1084,6 +1084,15 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (taiju/package-install 'htmlize)
    #+end_src
 
+** unicode-fonts
+
+   表示できる絵文字を増やすために unicode-fonts を入れる。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'unicode-fonts)
+     (unicode-fonts-setup)
+   #+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
