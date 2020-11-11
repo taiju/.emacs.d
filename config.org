@@ -538,6 +538,16 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (add-hook 'web-mode-hook #'lsp)
    #+end_src
 
+** Haskell
+
+   Haskell の編集モードをインストールして、LSP が使えるようにする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'haskell-mode)
+     (taiju/package-install 'lsp-haskell)
+     (add-hook 'haskell-mode-hook #'lsp)
+   #+end_src
+
 ** 汎用データフォーマット
 
    Emacs 標準で入っていない汎用データフォーマット用のパッケージを追加する。
