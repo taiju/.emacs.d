@@ -513,27 +513,28 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (taiju/package-install 'ob-go)
    #+end_src
 
-** TypeScript
+** JavaScript/TypeScript
 
-   TypeScript の開発環境。
+   JavaScript/TypeScript の開発環境。
 
-   編集モードを入れる。
+   TypeScript の編集モードを入れる。
 
    #+begin_src emacs-lisp
      (taiju/package-install 'typescript-mode)
    #+end_src
 
-   LSPを使う。
+   LSP を使う。
 
    #+begin_src emacs-lisp
+     (add-hook 'js-mode-hook #'lsp)
      (add-hook 'typescript-mode-hook #'lsp)
    #+end_src
 
-   拡張子が ~.tsx~ の時は ~web-mode~ を使う。
+   拡張子が ~.[jt]sx~ の時は ~web-mode~ を使う。
 
    #+begin_src emacs-lisp
      (taiju/package-install 'web-mode)
-     (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+     (add-to-list 'auto-mode-alist '("\\.[jt]sx\\'" . web-mode))
      (add-hook 'web-mode-hook #'lsp)
    #+end_src
 
