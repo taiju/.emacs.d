@@ -1065,6 +1065,14 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    SEE: https://github.com/akermu/emacs-libvterm/issues/323
 
+** htmlize
+
+   Org ファイルのエクスポートなどに使用する。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'htmlize)
+   #+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
