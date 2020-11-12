@@ -903,7 +903,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
     advice でまるっと差し替える。
 
-    #+begin_src emacs-lisp :noweb yes
+    #+begin_src emacs-lisp
       (when (and (equal (pkg-info-package-version 'twittering-mode) '(20181121 1402))
                  (>= emacs-major-version 27))
         (advice-add 'twittering-read-from-encrypted-file :around #'taiju/twittering-read-from-encrypted-file))
