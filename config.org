@@ -758,6 +758,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
        'org-babel-load-languages
        '((emacs-lisp . t)
          (dot . t)
+         (plantuml . t)
          (sql . t)
          (shell . t)
          (perl . t)
@@ -1091,6 +1092,17 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
    #+begin_src emacs-lisp
      (taiju/package-install 'unicode-fonts)
      (unicode-fonts-setup)
+   #+end_src
+
+** plantuml
+
+   PlantUML の編集ができるようにする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'plantuml-mode)
+     (setq plantuml-jar-path "~/bin/plantuml.jar")
+     (setq org-plantuml-jar-path plantuml-jar-path)
+     (setq plantuml-options "-charset UTF-8")
    #+end_src
 
 * Footnotes
