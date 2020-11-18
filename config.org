@@ -228,13 +228,14 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
 * ファイル全般
 
-  自動保存しない。
+  自動保存を有効にする。
+  Emacs 26 以降で使用できる auto-save-visited-mode は余計なファイルを作らない。
 
   #+begin_src emacs-lisp
-    (setq auto-save-default nil)
+    (auto-save-visited-mode +1)
   #+end_src
 
-  バックアップも作らない。
+  バックアップは作らない。
 
   #+begin_src emacs-lisp
     (setq make-backup-files nil)
