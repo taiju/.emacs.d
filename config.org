@@ -176,6 +176,13 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
     (put 'narrow-to-region 'disabled nil)
   #+end_src
 
+  タブバーを表示する。
+
+  #+begin_src emacs-lisp
+    (tab-bar-mode +1)
+    (tab-bar-history-mode +1)
+  #+end_src
+
 * 日本語
 
 ** 言語環境
