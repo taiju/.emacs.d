@@ -732,6 +732,18 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
             `((,(string-join (list org-directory "project.org") "/") :maxlevel . 3)))
     #+end_src
 
+    ~org-refile-use-outline-path~ を有効にする。
+
+    #+begin_src emacs-lisp
+      (setq org-refile-use-outline-path t)
+    #+end_src
+
+    段階的な絞り込みは不要。
+
+    #+begin_src emacs-lisp
+      (setq org-outline-path-complete-in-steps nil)
+    #+end_src
+
 *** org-agenda
 
     キーバインドは標準的なやつ。
