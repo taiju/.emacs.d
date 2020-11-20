@@ -799,8 +799,9 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    #+begin_src emacs-lisp
      (taiju/package-install 'undo-tree)
-     (global-undo-tree-mode 1)
    #+end_src
+
+   global-undo-tree-mode を有効にすると、region 内のみ undo することができなくなるので、必要な時に有効化するようにする。
 
 ** Twitter
 
