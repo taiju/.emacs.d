@@ -183,6 +183,12 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
     (tab-bar-history-mode +1)
   #+end_src
 
+  read-only モードの時は view モードにする。
+
+  #+begin_src emacs-lisp
+    (setq view-read-only t)
+  #+end_src
+
 * 日本語
 
 ** 言語環境
@@ -1038,15 +1044,6 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    #+begin_src emacs-lisp
      (taiju/package-install 'sudo-edit)
-   #+end_src
-
-** God Mode
-
-   疲れた時なんかに神になりたい時もある。
-
-   #+begin_src emacs-lisp
-     (taiju/package-install 'god-mode)
-     (global-set-key (kbd "<escape>") #'god-local-mode)
    #+end_src
 
 ** calendar
