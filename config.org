@@ -211,9 +211,13 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
    日本語入力は mozc 一択。[fn:mozc]
 
+   isearch などの挙動の改善のために、mozc-im も入れる。
+
    #+begin_src emacs-lisp
      (taiju/package-install 'mozc)
-     (setq default-input-method "japanese-mozc")
+     (taiju/package-install 'mozc-im)
+     (require 'mozc-im)
+     (setq default-input-method "japanese-mozc-im")
    #+end_src
 
    デフォルトのスタイルはちょっとうるさいので、スタイルを変更する。
