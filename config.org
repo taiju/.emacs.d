@@ -28,7 +28,6 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
   パッケージを初期化する。
 
   #+begin_src emacs-lisp
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
     (package-initialize)
   #+end_src
 
