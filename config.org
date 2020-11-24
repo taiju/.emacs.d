@@ -219,10 +219,12 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (setq default-input-method "japanese-mozc-im")
    #+end_src
 
-   デフォルトのスタイルはちょっとうるさいので、スタイルを変更する。
+   変換候補は posframe スタイルで表示する。
 
    #+begin_src emacs-lisp
-     (setq mozc-candidate-style 'echo-area)
+     (taiju/package-install 'mozc-cand-posframe)
+     (require 'mozc-cand-posframe)
+     (setq mozc-candidate-style 'posframe)
    #+end_src
 
 * フォント
