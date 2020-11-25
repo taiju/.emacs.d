@@ -1128,6 +1128,32 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (setq plantuml-options "-charset UTF-8")
    #+end_src
 
+** gnus
+
+   reddit を読めるようにする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'nnreddit)
+   #+end_src
+
+   現在の環境の Python は python2 がメインなので、 ~nnreddit-python-command~ に python3 のパスを設定する。
+
+   #+begin_src emacs-lisp
+     (setq nnreddit-python-command "python3")
+   #+end_src
+
+   プライマリなメソッドとして reddit を設定する。
+
+   #+begin_src emacs-lisp
+     (setq gnus-select-method '(nnreddit ""))
+   #+end_src
+
+   グループモードでトピックモードを有効にする。
+
+   #+begin_src emacs-lisp
+     (add-hook 'gnus-group-mode-hook #'gnus-topic-mode)
+   #+end_src
+
 ** csv-mode
 
    CSV の編集ができるようにする。
