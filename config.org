@@ -1059,9 +1059,9 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (setq calendar-mark-holidays-flag t)
    #+end_src
 
-** japanese-holidays.el
+** japanese-holidays
 
-   calendar や Org モードで日本の祝日を反映させるために、japenese-holidays.el をインストールする。
+   calendar や Org モードで日本の祝日を反映させるために、japenese-holidays をインストールする。
 
    #+begin_src emacs-lisp
      (taiju/package-install 'japanese-holidays)
@@ -1117,7 +1117,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (unicode-fonts-setup)
    #+end_src
 
-** plantuml
+** plantuml-mode
 
    PlantUML の編集ができるようにする。
 
