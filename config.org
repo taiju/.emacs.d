@@ -1128,6 +1128,14 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
      (setq plantuml-options "-charset UTF-8")
    #+end_src
 
+** csv-mode
+
+   CSV の編集ができるようにする。
+
+   #+begin_src emacs-lisp
+     (taiju/package-install 'csv-mode)
+   #+end_src
+
 * Footnotes
 
 [fn:mozc] この設定を上記の設定より前に書くと上手く効かなかった。
