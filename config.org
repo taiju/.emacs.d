@@ -860,7 +860,8 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
     差し替える関数は下記。 ~epa--decode-coding-string~ を ~decode-coding-string~ に変更しているだけ。
 
     #+begin_src emacs-lisp
-      (defun taiju/twittering-read-from-encrypted-file (_ file)
+      (require 'twittering-mode)
+      (defun taiju/twittering-read-from-encrypted-file (file)
         "Decrypt contents from FILE and return them.
       Read encrypted contents from FILE and return the decrypted contents.
       This function requires `epa' or `alpaca' library."
@@ -939,7 +940,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
     #+begin_src emacs-lisp
       (when (and (equal (pkg-info-package-version 'twittering-mode) '(20181121 1402))
                  (>= emacs-major-version 27))
-        (advice-add 'twittering-read-from-encrypted-file :around #'taiju/twittering-read-from-encrypted-file))
+        (advice-add 'twittering-read-from-encrypted-file :override #'taiju/twittering-read-from-encrypted-file))
     #+end_src
 
 ** which-key
