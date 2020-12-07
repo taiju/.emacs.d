@@ -740,7 +740,7 @@ Org モードで書かれたこの文書は、 ~init.el~ から ~(org-babel-load
 
     #+begin_src emacs-lisp
       (setq org-refile-targets
-            `((,(string-join (list org-directory "project.org") "/") :maxlevel . 3)))
+            `((,(string-join (list org-directory "project.org") "/") :maxlevel . 4)))
     #+end_src
 
     ~org-refile-use-outline-path~ を有効にする。
